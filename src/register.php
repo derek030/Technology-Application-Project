@@ -2,6 +2,9 @@
 // Initialize the session
 session_start();
 
+include 'databaseConfig.php';
+
+
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +17,7 @@ session_start();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Register</title>
 </head>
 
@@ -305,12 +309,16 @@ session_start();
 
     <!-- Javascript -->
     <script>
-        const btn = document.querySelector("button.mobile-menu-button");
-        const menu = document.querySelector(".mobile-menu");
+        $(document).ready(function () {
+            const btn = document.querySelector("button.mobile-menu-button");
+            const menu = document.querySelector(".mobile-menu");
 
-        // add event listeners
-        btn.addEventListener("click", () => {
-            menu.classList.toggle("hidden");
+            // add event listeners
+            btn.addEventListener("click", () => {
+                menu.classList.toggle("hidden");
+            });
+
+            
         });
     </script>
 </body>

@@ -2,6 +2,8 @@
 // Initialize the session
 session_start();
 
+include 'databaseConfig.php';
+
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === 1) {
     header("location: mypets.php");
@@ -14,7 +16,6 @@ if (isset($_POST['submit'])) {
 }
 
 if (isset($_POST['email']) && isset($_POST['password'])) {
-
 
     // Check if username is empty
     if (empty(trim($_POST["email"]))) {
@@ -33,28 +34,43 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     // Validate credentials
     if (empty($email_err) && empty($password_err)) {
 
+        $sql = "SELECT * FROM customer WHERE email='$email' AND password='$password'";
 
-        $_SESSION['email'] = $row['email'];
+        $result = mysqli_query($conn, $sql);
 
-        $_SESSION['name'] = $row['first_name'] . ' ' . $row['last_name'];
+        if (mysqli_num_rows($result) === 1) {
 
-        $_SESSION['id'] = $row['id'];
+            $row = mysqli_fetch_assoc($result);
 
-        $_SESSION['loggedin'] = 1;
+            if ($row['email'] === $email && $row['password'] === $password) {
 
-        header("Location: mypets.php");
+                $_SESSION['email'] = $row['email'];
 
-        exit();
+                $_SESSION['name'] = $row['first_name'] . ' ' . $row['last_name'];
 
-    } else {
-        // die('1234');
+                $_SESSION['id'] = $row['id'];
 
-        header("Location: login.php?error=Incorect Email or Password");
+                $_SESSION['loggedin'] = 1;
 
-        exit();
+                header("Location: mypets.php");
 
+                exit();
+
+            } else {
+
+                header("Location: login.php?error=Incorect Email or Password");
+
+                exit();
+
+            }
+        } else {
+
+            header("Location: login.php?error=Incorect Email or Password");
+
+            exit();
+
+        }
     }
-
 }
 
 ?>
@@ -69,6 +85,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Login</title>
 </head>
 
@@ -283,12 +300,16 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 
     <!-- Javascript -->
     <script>
-        const btn = document.querySelector("button.mobile-menu-button");
-        const menu = document.querySelector(".mobile-menu");
+        $(document).ready(function () {
+            const btn = document.querySelector("button.mobile-menu-button");
+            const menu = document.querySelector(".mobile-menu");
 
-        // add event listeners
-        btn.addEventListener("click", () => {
-            menu.classList.toggle("hidden");
+            // add event listeners
+            btn.addEventListener("click", () => {
+                menu.classList.toggle("hidden");
+            });
+
+
         });
     </script>
 </body>

@@ -2,6 +2,8 @@
 // Initialize the session
 session_start();
 
+include 'databaseConfig.php';
+
 $isLoginPanelShowed = true;
 // Check if the user is already logged in
 if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === 1) {
