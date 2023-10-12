@@ -24,7 +24,7 @@ include 'databaseConfig.php';
 <body>
     <!-- Toast message -->
     <div class="fixed top-4 right-4 flex flex-col-reverse items-end">
-        <!-- Danger -->
+        <!-- Error -->
         <div id="error-toast"
             class='flex items-center text-white max-w-sm w-full bg-red-400 shadow-md rounded-lg overflow-hidden mx-auto hidden'>
             <div class='w-10 border-r px-2'>
@@ -42,7 +42,7 @@ include 'databaseConfig.php';
                 </div>
             </div>
         </div>
-        <!-- succes -->
+        <!-- Success -->
         <div id="success-toast"
             class='flex items-center text-white max-w-sm w-full bg-green-400 shadow-md rounded-lg overflow-hidden mx-auto hidden'>
             <div class='w-10 border-r px-2'>
@@ -207,8 +207,12 @@ include 'databaseConfig.php';
                             <select id="stateField" name="stateField" placeholder="State"
                                 class="block w-full rounded-md border-0 px-4 py-3.5  text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:max-w-xs sm:text-sm sm:leading-6 font-poppins">
                                 <option>State</option>
-                                <option>State 1</option>
-                                <option>State 2</option>
+                                <option>NSW</option>
+                                <option>VIC</option>
+                                <option>QLD</option>
+                                <option>SA</option>
+                                <option>WA</option>
+                                <option>TAS</option>
                             </select>
                         </div>
 
@@ -366,19 +370,43 @@ include 'databaseConfig.php';
             sumbitButton.addEventListener('click', function () {
                 // Form Validation
                 var errormsg = validateForm();
-                console.log(errormsg);
-
                 if (errormsg.trim() === "") {
+                    console.log("success 1");
                     // call API
+                    $.ajax({
+                        url: 'registerapi.php',
+                        method: 'POST',
+                        data: {
+                            firstName: document.getElementById("firstNameField").value,
+                            lastName: document.getElementById("lastNameField").value,
+                            email: document.getElementById("emailField").value,
+                            password: document.getElementById("passwordField").value,
+                            contactNumber: document.getElementById("contactNumberField").value,
+                            streetAddress1: document.getElementById("streetAddress1Field").value.trim() === "" ? null : document.getElementById("streetAddress1Field").value,
+                            streetAddress2: document.getElementById("streetAddress2Field").value.trim() === "" ? null : document.getElementById("streetAddress2Field").value,
+                            suburb: document.getElementById("suburbField").value.trim() === "" ? null : document.getElementById("suburbField").value,
+                            state: (document.getElementById("stateField").options[document.getElementById("stateField").selectedIndex].value === "State") ? null : document.getElementById("stateField").options[document.getElementById("stateField").selectedIndex].value,
+                            postcode: document.getElementById("postcodeField").value.trim() === "" ? null : document.getElementById("postcodeField").value,
+                        },
+                        success: function (response) {
+                            // Handle the AJAX success response
+                            console.log(response);
 
-
-                    // show success message for 10 seconds, then redirect to the portfolio page
-                    const successToast = document.getElementById('success-toast');
-                    successToast.classList.remove('hidden');
-                    setTimeout(function () {
-                        window.location.href = 'portfolio-page.html'; // Redirect to the portfolio page
-                    }, 10000); // Wait for 10 seconds before redirecting
-
+                            if (response.data) {
+                                // show success message for 10 seconds, then redirect to the portfolio page
+                                const successToast = document.getElementById('success-toast');
+                                successToast.classList.remove('hidden');
+                                setTimeout(function () {
+                                    window.location.href = 'mypets.php'; // Redirect to the portfolio page
+                                }, 10000); // Wait for 10 seconds before redirecting
+                            } else {
+                                showToast(response.message);
+                            }
+                        }, error: function (error) {
+                            // Handle the AJAX error
+                            console.log(error);
+                        }
+                    });
                 } else {
                     // show error message
                     showToast(errormsg);
@@ -395,12 +423,10 @@ include 'databaseConfig.php';
                 var streetAddress1Field = document.getElementById("streetAddress1Field").value;
                 var streetAddress2Field = document.getElementById("streetAddress2Field").value;
                 var suburbField = document.getElementById("suburbField").value;
-                var stateField = document.getElementById("stateField").options;
+                var stateField = document.getElementById("stateField").options[document.getElementById("stateField").selectedIndex].value;
                 var postcodeField = document.getElementById("postcodeField").value;
-
-                var mandatoryFields = document.getElementsByClassName('mandatoryField');
+                var termsCheckbox = document.getElementById('terms');
                 var errormsg = "";
-
 
                 // Check if first name is empty
                 if (firstNameField.trim() === "") {
@@ -427,13 +453,45 @@ include 'databaseConfig.php';
                     errormsg += 'Contact Number is required.\n';
                 }
 
+                // Check if address is empty or valid
+                // All information must be filled if any address field is entered
+                // Otherwise, all fields should be blank
+                if (
+                    !(
+                        (streetAddress1Field.trim() === "" &&
+                            streetAddress2Field.trim() === "" &&
+                            suburbField.trim() === "" &&
+                            stateField === "State" &&
+                            postcodeField.trim() === "")
+                        ||
+                        isValidAddress(streetAddress1Field.trim(), suburbField.trim(), stateField, postcodeField.trim())
+                    )
+                ) {
+                    errormsg += 'All address fields are required to have a valid address.\n';
+                }
+
+                // Check if the T&C accepted
+                if (!termsCheckbox.checked) {
+                    errormsg += 'You must accept the terms and conditions.\n';
+                }
+
                 return errormsg;
             }
         });
 
+        function isValidAddress(streetAddress1, suburb, state, postcode) {
+            if (streetAddress1 && suburb && state !== "State" && postcode) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         function showToast(message) {
             const errorToast = document.getElementById('error-toast');
             const errorContent = document.getElementById('error-content');
+            // Replace \n with <br> for line breaks
+            message = message.replace(/\n/g, '<br>');
             errorContent.innerHTML = message;
             errorToast.classList.remove('hidden');
 

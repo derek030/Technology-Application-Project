@@ -59,6 +59,8 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === 1) {
           <a href="register.php"
             class="py-2.5 px-6 bg-darkblue-primary text-white rounded-full font-poppins font-medium"
             style="display:<?php echo ($isLoginPanelShowed ? 'block' : 'none'); ?>">Register</a>
+          <a href="mypets.php" class="py-2.5 px-6 bg-darkblue-primary text-white rounded-full font-poppins font-medium"
+            style="display:<?php echo ($isLoginPanelShowed ? 'none' : 'block'); ?>">My Profile</a>
           <a href="logout.php"
             class="py-2.5 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary font-medium rounded-full font-poppins"
             style="display:<?php echo ($isLoginPanelShowed ? 'none' : 'block'); ?>">Logout</a>
