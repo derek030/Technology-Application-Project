@@ -2,6 +2,16 @@
 // Initialize the session
 session_start();
 
+include 'databaseConfig.php';
+
+// Check if the user is already logged in, if yes then redirect him to welcome page
+if (isset($_GET['loggedin']) && $_GET['loggedin'] == 1) {
+    $_SESSION['loggedin'] = 1;
+}
+
+if (isset($_GET['email'])) {
+    $_SESSION['email'] = $_GET['email'];
+}
 ?>
 
 <!DOCTYPE html>

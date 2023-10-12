@@ -22,7 +22,6 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === 1) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="custome-styles.css" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <title>Home</title>
 </head>

@@ -4,75 +4,6 @@ session_start();
 
 include 'databaseConfig.php';
 
-// Check if the user is already logged in, if yes then redirect him to welcome page
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === 1) {
-    header("location: mypets.php");
-    exit;
-}
-
-if (isset($_POST['submit'])) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-}
-
-if (isset($_POST['email']) && isset($_POST['password'])) {
-
-    // Check if username is empty
-    if (empty(trim($_POST["email"]))) {
-        $email_err = "Please enter your email.";
-    } else {
-        $email = trim($_POST["email"]);
-    }
-
-    // Check if password is empty
-    if (empty(trim($_POST["password"]))) {
-        $password_err = "Please enter your password.";
-    } else {
-        $password = trim($_POST["password"]);
-    }
-
-    // Validate credentials
-    if (empty($email_err) && empty($password_err)) {
-
-        $sql = "SELECT * FROM customer WHERE email='$email' AND password='$password'";
-
-        $result = mysqli_query($conn, $sql);
-
-        if (mysqli_num_rows($result) === 1) {
-
-            $row = mysqli_fetch_assoc($result);
-
-            if ($row['email'] === $email && $row['password'] === $password) {
-
-                $_SESSION['email'] = $row['email'];
-
-                $_SESSION['name'] = $row['first_name'] . ' ' . $row['last_name'];
-
-                $_SESSION['id'] = $row['id'];
-
-                $_SESSION['loggedin'] = 1;
-
-                header("Location: mypets.php");
-
-                exit();
-
-            } else {
-
-                header("Location: login.php?error=Incorect Email or Password");
-
-                exit();
-
-            }
-        } else {
-
-            header("Location: login.php?error=Incorect Email or Password");
-
-            exit();
-
-        }
-    }
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -85,11 +16,33 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Login</title>
 </head>
 
 <body>
+    <!-- Toast message -->
+    <div class="fixed top-4 right-4 flex flex-col-reverse items-end">
+        <!-- Error -->
+        <div id="error-toast"
+            class='flex items-center text-white max-w-sm w-full bg-red-400 shadow-md rounded-lg overflow-hidden mx-auto hidden'>
+            <div class='w-10 border-r px-2'>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636">
+                    </path>
+                </svg>
+            </div>
+
+            <div class='flex items-center px-2 py-3'>
+                <div class='mx-3'>
+                    <p id="error-content"></p>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Main nav bar -->
     <nav>
         <!-- Main nav bar - Desktop -->
@@ -160,7 +113,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                 </p>
             </div>
             <div class="my-12 mx-auto md:w-full md:max-w-xl px-4">
-                <form class="space-y-6" action="" method="POST">
+                <form class="space-y-6 needs-validation" novalidate>
                     <div>
                         <label for="email"
                             class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">Email</label>
@@ -181,7 +134,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                         </div>
                     </div>
                     <div>
-                        <button type="submit"
+                        <button id="submitBtn" type="button"
                             class="flex justify-center rounded-full bg-darkblue-primary px-8 py-2.5 leading-6 text-white shadow-sm mx-auto font-poppins font-medium">Login</button>
                     </div>
                 </form>
@@ -309,6 +262,61 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                 menu.classList.toggle("hidden");
             });
 
+            // Get the button
+            const sumbitButton = document.getElementById('submitBtn');
+            // Add click event listener to the publish button
+            sumbitButton.addEventListener('click', function () {
+                // Form Validation
+                var emailField = document.getElementById("email").value;
+                var passwordField = document.getElementById("password").value;
+
+                if (emailField.trim() === '' || passwordField.trim() === '') {
+                    console.log("fail 1");
+                    // show error message
+                    showToast("Incorrect email or password.");
+                } else {
+                    console.log("success 1");
+                    // call API
+                    $.ajax({
+                        url: 'loginapi.php',
+                        method: 'POST',
+                        data: {
+                            email: emailField,
+                            password: passwordField,
+                        },
+                        success: function (response) {
+                            // Handle the AJAX success response
+                            console.log(response);
+
+                            if (response.data) {
+                                console.log(response.data.email);
+                                window.location.href = 'mypets.php?loggedin=1&email=' + response.data.email; // Redirect to the portfolio page
+                            } else {
+                                showToast(response.message);
+                            }
+                        }, error: function (error) {
+                            // Handle the AJAX error
+                            console.log(error);
+                        }
+                    });
+                }
+
+            });
+
+            function showToast(message) {
+                const errorToast = document.getElementById('error-toast');
+                const errorContent = document.getElementById('error-content');
+                errorContent.innerHTML = message;
+                errorToast.classList.remove('hidden');
+
+                // Automatically hide the toast after 10 seconds (10000 milliseconds)
+                setTimeout(hideToast, 10000);
+            }
+
+            function hideToast() {
+                const errorToast = document.getElementById('error-toast');
+                errorToast.classList.add('hidden');
+            }
 
         });
     </script>
