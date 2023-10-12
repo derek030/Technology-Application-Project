@@ -117,7 +117,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                 <div class="hidden md:flex items-center space-x-4">
                     <a href="login.php"
                         class="py-2.5 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary font-medium rounded-full font-poppins">Login</a>
-                    <a href="#"
+                    <a href="register.php"
                         class="py-2.5 px-6 bg-darkblue-primary text-white rounded-full font-poppins font-medium">Register</a>
                 </div>
 
@@ -142,7 +142,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
             <a href="#" class="block py-2 px-6  text-darkblue-primary font-poppins">About</a>
             <a href="#" class="block py-2 px-6  text-darkblue-primary font-poppins">Contact</a>
             <a href="login.php" class="block py-2 px-6  text-darkblue-primary font-poppins">Login</a>
-            <a href="#" class="block py-2 px-6  text-darkblue-primary font-poppins">Register</a>
+            <a href="register.php" class="block py-2 px-6  text-darkblue-primary font-poppins">Register</a>
         </div>
     </nav>
 
@@ -156,7 +156,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                     Login</h2>
                 <p class="mt-2.5 text-center text-sm text-darkblue-primary font-poppins">
                     Don't have an account?
-                    <a href="#" class="font-semibold leading-6 text-state-blue">Register</a>
+                    <a href="register.php" class="font-semibold leading-6 text-state-blue">Register</a>
                 </p>
             </div>
             <div class="my-12 mx-auto md:w-full md:max-w-xl px-4">

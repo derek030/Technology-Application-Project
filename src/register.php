@@ -3,8 +3,6 @@
 session_start();
 
 include 'databaseConfig.php';
-
-
 ?>
 
 <!DOCTYPE html>
@@ -17,11 +15,53 @@ include 'databaseConfig.php';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <title>Register</title>
 </head>
 
 <body>
+    <!-- Toast message -->
+    <div class="fixed top-4 right-4 flex flex-col-reverse items-end">
+        <!-- Danger -->
+        <div id="error-toast"
+            class='flex items-center text-white max-w-sm w-full bg-red-400 shadow-md rounded-lg overflow-hidden mx-auto hidden'>
+            <div class='w-10 border-r px-2'>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636">
+                    </path>
+                </svg>
+            </div>
+
+            <div class='flex items-center px-2 py-3'>
+                <div class='mx-3'>
+                    <p id="error-content"></p>
+                </div>
+            </div>
+        </div>
+        <!-- succes -->
+        <div id="success-toast"
+            class='flex items-center text-white max-w-sm w-full bg-green-400 shadow-md rounded-lg overflow-hidden mx-auto hidden'>
+            <div class='w-10 border-r px-2'>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z">
+                    </path>
+                </svg>
+            </div>
+
+            <div class='flex items-center px-2 py-3'>
+                <div class='mx-3'>
+                    <p id="success-content">Register successful.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main nav bar -->
     <nav>
         <!-- Main nav bar - Desktop -->
@@ -92,77 +132,79 @@ include 'databaseConfig.php';
                 </p>
             </div>
             <div class="my-12 mx-auto md:w-full md:max-w-xl px-4">
-                <form class="space-y-6" action="#" method="POST">
+                <form class="space-y-6 needs-validation" novalidate>
                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
                         <div class="sm:col-span-3">
-                            <label for="first-name"
+                            <label for="firstNameField"
                                 class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">First
-                                Name</label>
+                                Name <span class="mandatoryField">*</span></label>
                             <div class="mt-2">
-                                <input type="text" name="first-name" id="first-name" placeholder="First Name"
+                                <input type="text" name="firstNameField" id="firstNameField" placeholder="First Name"
                                     class="block w-full rounded-md border-0 px-4 py-3.5 text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                             </div>
                         </div>
 
                         <div class="sm:col-span-3">
-                            <label for="last-name"
+                            <label for="lastNameField"
                                 class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">Last
-                                Name</label>
+                                Name <span class="mandatoryField">*</span></label>
                             <div class="mt-2">
-                                <input type="text" name="last-name" id="last-name" placeholder="Last Name"
+                                <input type="text" name="lastNameField" id="lastNameField" placeholder="Last Name"
                                     class="block w-full rounded-md border-0 px-4 py-3.5 text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                             </div>
                         </div>
 
                         <div class="sm:col-span-full">
-                            <label for="email" class="block text-sm font-medium leading-6 text-darkblue-primary">Email
-                                address</label>
+                            <label for="emailField"
+                                class="block text-sm font-medium leading-6 text-darkblue-primary">Email
+                                address <span class="mandatoryField">*</span></label>
                             <div class="mt-2">
-                                <input id="email" name="email" type="email" placeholder="Email"
+                                <input id="emailField" name="emailField" type="email" placeholder="Email"
                                     class="block w-full rounded-md border-0 px-4 py-3.5  text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                             </div>
                         </div>
 
                         <div class="sm:col-span-full">
-                            <label for="password"
-                                class="block text-sm font-medium leading-6 text-darkblue-primary">Password</label>
+                            <label for="passwordField"
+                                class="block text-sm font-medium leading-6 text-darkblue-primary">Password <span
+                                    class="mandatoryField">*</span></label>
                             <div class="mt-2">
-                                <input id="password" name="password" type="password" placeholder="Password"
+                                <input id="passwordField" name="passwordField" type="password" placeholder="Password"
                                     class="block w-full rounded-md border-0 px-4 py-3.5  text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                             </div>
                         </div>
 
                         <div class="sm:col-span-full">
-                            <label for="contact-number"
+                            <label for="contactNumberField"
                                 class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">Contact
-                                Number</label>
+                                Number <span class="mandatoryField">*</span></label>
                             <div class="mt-2">
-                                <input type="text" name="contact-number" id="contact-number"
+                                <input type="text" name="contactNumberField" id="contactNumberField"
                                     placeholder="Contact Number"
                                     class="block w-full rounded-md border-0 px-4 py-3.5 text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                             </div>
                         </div>
 
                         <div class="sm:col-span-full">
-                            <label for="address"
+                            <label for="addressField"
                                 class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">Address</label>
                             <div class="mt-2">
-                                <input type="text" name="street-address-1" id="street-address-1"
+                                <input type="text" name="streetAddress1Field" id="streetAddress1Field"
                                     placeholder="Street Address Line 1"
                                     class="block w-full rounded-md border-0 px-4 py-3.5 text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                             </div>
                         </div>
                         <div class="sm:col-span-full">
-                            <input type="text" name="street-address-2" id="street-address-2"
+                            <input type="text" name="streetAddress2Field" id="streetAddress2Field"
                                 placeholder="Street Address Line 2"
                                 class="block w-full rounded-md border-0 px-4 py-3.5 text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                         </div>
                         <div class="sm:col-span-full">
-                            <input type="text" name="suburb" id="suburb" placeholder="Suburb"
+                            <input type="text" name="suburbField" id="suburbField" placeholder="Suburb"
                                 class="block w-full rounded-md border-0 px-4 py-3.5 text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                         </div>
                         <div class="sm:col-span-3">
-                            <select id="state" name="state" placeholder="State"
+                            <select id="stateField" name="stateField" placeholder="State"
                                 class="block w-full rounded-md border-0 px-4 py-3.5  text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:max-w-xs sm:text-sm sm:leading-6 font-poppins">
                                 <option>State</option>
                                 <option>State 1</option>
@@ -171,7 +213,7 @@ include 'databaseConfig.php';
                         </div>
 
                         <div class="sm:col-span-3">
-                            <input type="text" name="post-code" id="postcode" placeholder="Postcode"
+                            <input type="text" name="postcodeField" id="postcodeField" placeholder="Postcode"
                                 class="block w-full rounded-md border-0 px-4 py-3.5 text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                         </div>
                     </div>
@@ -189,7 +231,7 @@ include 'databaseConfig.php';
                             </div>
                         </div>
                         <div>
-                            <button type="submit"
+                            <button id="submitBtn" type="button"
                                 class="flex justify-center rounded-full bg-darkblue-primary px-8 py-2.5 leading-6 text-white shadow-sm mx-auto font-poppins font-medium">Register</button>
                         </div>
                     </div>
@@ -318,8 +360,92 @@ include 'databaseConfig.php';
                 menu.classList.toggle("hidden");
             });
 
-            
+            // Get the button
+            const sumbitButton = document.getElementById('submitBtn');
+            // Add click event listener to the publish button
+            sumbitButton.addEventListener('click', function () {
+                // Form Validation
+                var errormsg = validateForm();
+                console.log(errormsg);
+
+                if (errormsg.trim() === "") {
+                    // call API
+
+
+                    // show success message for 10 seconds, then redirect to the portfolio page
+                    const successToast = document.getElementById('success-toast');
+                    successToast.classList.remove('hidden');
+                    setTimeout(function () {
+                        window.location.href = 'portfolio-page.html'; // Redirect to the portfolio page
+                    }, 10000); // Wait for 10 seconds before redirecting
+
+                } else {
+                    // show error message
+                    showToast(errormsg);
+                }
+
+            });
+
+            function validateForm() {
+                var firstNameField = document.getElementById("firstNameField").value;
+                var lastNameField = document.getElementById("lastNameField").value;
+                var emailField = document.getElementById("emailField").value;
+                var passwordField = document.getElementById("passwordField").value;
+                var contactNumberField = document.getElementById("contactNumberField").value;
+                var streetAddress1Field = document.getElementById("streetAddress1Field").value;
+                var streetAddress2Field = document.getElementById("streetAddress2Field").value;
+                var suburbField = document.getElementById("suburbField").value;
+                var stateField = document.getElementById("stateField").options;
+                var postcodeField = document.getElementById("postcodeField").value;
+
+                var mandatoryFields = document.getElementsByClassName('mandatoryField');
+                var errormsg = "";
+
+
+                // Check if first name is empty
+                if (firstNameField.trim() === "") {
+                    errormsg += 'First Name is required.\n';
+                }
+
+                // Check if last name is empty
+                if (lastNameField.trim() === "") {
+                    errormsg += 'Last Name is required.\n';
+                }
+
+                // Check if email is empty
+                if (emailField.trim() === "") {
+                    errormsg += 'Email is required.\n';
+                }
+
+                // Check if password is empty
+                if (passwordField.trim() === "") {
+                    errormsg += 'Password is required.\n';
+                }
+
+                // Check if contact number is empty
+                if (contactNumberField.trim() === "") {
+                    errormsg += 'Contact Number is required.\n';
+                }
+
+                return errormsg;
+            }
         });
+
+        function showToast(message) {
+            const errorToast = document.getElementById('error-toast');
+            const errorContent = document.getElementById('error-content');
+            errorContent.innerHTML = message;
+            errorToast.classList.remove('hidden');
+
+            // Automatically hide the toast after 10 seconds (10000 milliseconds)
+            setTimeout(hideToast, 10000);
+        }
+
+        function hideToast() {
+            const errorToast = document.getElementById('error-toast');
+            errorToast.classList.add('hidden');
+        }
+
     </script>
 </body>
 
