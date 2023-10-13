@@ -1,3 +1,11 @@
+<?php
+// Initialize the session
+session_start();
+
+include 'databaseConfig.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,10 +17,51 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="styles.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Book Appointment</title>
 </head>
 
 <body>
+    <!-- Toast message -->
+    <div class="fixed top-4 right-4 flex flex-col-reverse items-end">
+        <!-- Error -->
+        <div id="error-toast"
+            class='flex items-center text-white max-w-sm w-full bg-red-400 shadow-md rounded-lg overflow-hidden mx-auto hidden'>
+            <div class='w-10 border-r px-2'>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636">
+                    </path>
+                </svg>
+            </div>
+
+            <div class='flex items-center px-2 py-3'>
+                <div class='mx-3'>
+                    <p id="error-content"></p>
+                </div>
+            </div>
+        </div>
+        <!-- Success -->
+        <div id="success-toast"
+            class='flex items-center text-white max-w-sm w-full bg-green-400 shadow-md rounded-lg overflow-hidden mx-auto hidden'>
+            <div class='w-10 border-r px-2'>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z">
+                    </path>
+                </svg>
+            </div>
+
+            <div class='flex items-center px-2 py-3'>
+                <div class='mx-3'>
+                    <p id="success-content"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main nav bar -->
     <nav>
         <!-- Main nav bar - Desktop -->
@@ -266,7 +315,7 @@
                         </div>
                         <div class="mt-6 space-y-6">
                             <div>
-                                <button id="bookingBtn" type="submit"
+                                <button id="bookingBtn" type="button"
                                     class="flex justify-center rounded-full bg-darkblue-primary px-8 py-2.5 leading-6 text-white shadow-sm mx-auto font-poppins font-medium">Book
                                     Now</button>
                             </div>

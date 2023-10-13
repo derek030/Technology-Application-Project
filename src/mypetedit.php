@@ -1,3 +1,15 @@
+<?php
+// Initialize the session
+session_start();
+
+include 'databaseConfig.php';
+
+if (isset($_GET['action'])) {
+    echo '<script>console.log("action is ' . $_GET['action'] . '");</script>';
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,10 +21,51 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="styles.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>My Pets</title>
 </head>
 
 <body>
+    <!-- Toast message -->
+    <div class="fixed top-4 right-4 flex flex-col-reverse items-end">
+        <!-- Error -->
+        <div id="error-toast"
+            class='flex items-center text-white max-w-sm w-full bg-red-400 shadow-md rounded-lg overflow-hidden mx-auto hidden'>
+            <div class='w-10 border-r px-2'>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636">
+                    </path>
+                </svg>
+            </div>
+
+            <div class='flex items-center px-2 py-3'>
+                <div class='mx-3'>
+                    <p id="error-content"></p>
+                </div>
+            </div>
+        </div>
+        <!-- Success -->
+        <div id="success-toast"
+            class='flex items-center text-white max-w-sm w-full bg-green-400 shadow-md rounded-lg overflow-hidden mx-auto hidden'>
+            <div class='w-10 border-r px-2'>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z">
+                    </path>
+                </svg>
+            </div>
+
+            <div class='flex items-center px-2 py-3'>
+                <div class='mx-3'>
+                    <p id="success-content"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main nav bar -->
     <nav>
         <!-- Main nav bar - Desktop -->
@@ -29,7 +82,7 @@
 
                     <!-- Left nav -->
                     <div class="hidden md:flex items-center space-x-1">
-                        <a href="index.html" class="py-5 px-3 text-darkblue-primary font-poppins font-medium">Home</a>
+                        <a href="index.php" class="py-5 px-3 text-darkblue-primary font-poppins font-medium">Home</a>
                         <a href="#" class="py-5 px-3 text-darkblue-primary font-poppins font-medium">Services</a>
                         <a href="#" class="py-5 px-3 text-darkblue-primary font-poppins font-medium">About</a>
                         <a href="#" class="py-5 px-3 text-darkblue-primary font-poppins font-medium">Contact</a>
@@ -38,10 +91,10 @@
 
                 <!-- Right nav -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="mypets.html"
+                    <a href="mypets.php"
                         class="py-2.5 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary font-medium rounded-full font-poppins">My
                         Profile</a>
-                    <a href=""
+                    <a href="logout.php"
                         class="py-2.5 px-6 bg-darkblue-primary text-white rounded-full font-poppins font-medium">Logout</a>
                 </div>
 
@@ -61,12 +114,12 @@
 
         <!-- Main nav bar - Mobile -->
         <div class="mobile-menu hidden md:hidden">
-            <a href="#" class="block py-2 px-6 text-darkblue-primary font-poppins">Home</a>
+            <a href="index.php" class="block py-2 px-6 text-darkblue-primary font-poppins">Home</a>
             <a href="#" class="block py-2 px-6 text-darkblue-primary font-poppins">Services</a>
             <a href="#" class="block py-2 px-6  text-darkblue-primary font-poppins">About</a>
             <a href="#" class="block py-2 px-6  text-darkblue-primary font-poppins">Contact</a>
-            <a href="#" class="block py-2 px-6  text-darkblue-primary font-poppins">My Profile</a>
-            <a href="#" class="block py-2 px-6  text-darkblue-primary font-poppins">Logout</a>
+            <a href="mypets.php" class="block py-2 px-6  text-darkblue-primary font-poppins">My Profile</a>
+            <a href="logout.php" class="block py-2 px-6  text-darkblue-primary font-poppins">Logout</a>
         </div>
     </nav>
 
@@ -80,34 +133,34 @@
                     Noodle’s Profile</h2>
             </div>
             <div class="my-12 mx-auto md:w-full md:max-w-xl px-4">
-                <form class="space-y-6" action="#" method="POST">
+                <form class="space-y-6 needs-validation" novalidate>
                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
 
                         <div class="sm:col-span-full">
-                            <label for="pet-name"
+                            <label for="petNameField"
                                 class="block text-sm font-medium leading-6 text-darkblue-primary">Name</label>
                             <div class="mt-2">
-                                <input id="pet-name" name="pet-name" type="pet-name" placeholder="Name"
+                                <input id="petNameField" name="petNameField" type="text" placeholder="Name"
                                     class="block w-full rounded-md border-0 px-4 py-3.5  text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                             </div>
                         </div>
 
                         <div class="sm:col-span-3">
-                            <label for="pet-age"
+                            <label for="petAgeField"
                                 class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">
                                 Age</label>
                             <div class="mt-2">
-                                <input type="text" name="pet-age" id="pet-age" placeholder="Age"
+                                <input type="text" name="petAgeField" id="petAgeField" placeholder="Age"
                                     class="block w-full rounded-md border-0 px-4 py-3.5 text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                             </div>
                         </div>
 
                         <div class="sm:col-span-3">
-                            <label for="pet-age-unit"
+                            <label for="petAgeUnitField"
                                 class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">Age
                                 Unit</label>
                             <div class="mt-2">
-                                <select id="pet-age-unit" name="pet-age-unit" placeholder="Age Unit"
+                                <select id="petAgeUnitField" name="petAgeUnitField" placeholder="Age Unit"
                                     class="block w-full rounded-md border-0 px-4 py-3.5  text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:max-w-xs sm:text-sm sm:leading-6 font-poppins">
                                     <option>Years Old</option>
                                     <option>Weeks</option>
@@ -116,10 +169,10 @@
                         </div>
 
                         <div class="sm:col-span-3">
-                            <label for="pet-gender"
+                            <label for="petGenderField"
                                 class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">Gender</label>
                             <div class="mt-2">
-                                <select id="pet-gender" name="pet-gender" placeholder="Gender"
+                                <select id="petGenderField" name="petGenderField" placeholder="Gender"
                                     class="block w-full rounded-md border-0 px-4 py-3.5  text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:max-w-xs sm:text-sm sm:leading-6 font-poppins">
                                     <option>Gender</option>
                                     <option>Male</option>
@@ -129,20 +182,20 @@
                         </div>
 
                         <div class="sm:col-span-3">
-                            <label for="pet-weight"
+                            <label for="petWeightField"
                                 class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">
                                 Weight (kg)</label>
                             <div class="mt-2">
-                                <input type="text" name="pet-weight" id="pet-weight" placeholder="Weight"
+                                <input type="text" name="petWeightField" id="petWeightField" placeholder="Weight"
                                     class="block w-full rounded-md border-0 px-4 py-3.5 text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                             </div>
                         </div>
 
                         <div class="sm:col-span-full">
-                            <label for="pet-breed"
+                            <label for="petBreedField"
                                 class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">Breed</label>
                             <div class="mt-2">
-                                <input type="text" name="pet-breed" id="pet-breed" placeholder="Breed"
+                                <input type="text" name="petBreedField" id="petBreedField" placeholder="Breed"
                                     class="block w-full rounded-md border-0 px-4 py-3.5 text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                             </div>
                         </div>
@@ -158,12 +211,12 @@
                                         alt="" />
                                 </div>
                                 <div>
-                                    <button
+                                    <button id="uploadBtn"
                                         class="flex justify-center rounded-full bg-darkblue-primary px-8 py-2.5 leading-6 text-white shadow-sm mx-auto font-poppins font-medium">Upload
                                         Photo</button>
                                 </div>
                                 <div class="">
-                                    <button
+                                    <button id="removeBtn"
                                         class="flex justify-center rounded-full bg-transparent text-darkblue-primary border border-darkblue-primary px-8 py-2.5 leading-6 shadow-sm mx-auto font-poppins font-medium">Remove
                                         Photo</button>
                                 </div>
@@ -202,7 +255,7 @@
                         </div>
 
                         <div class="sm:col-span-full flex justify-center">
-                            <button type="submit"
+                            <button id="submitBtn" type="button"
                                 class="flex justify-center rounded-full bg-darkblue-primary px-8 py-2.5 leading-6 text-white shadow-sm mx-auto font-poppins font-medium">Save</button>
                         </div>
                 </form>
@@ -215,7 +268,7 @@
             <div class="mx-auto max-w-6xl">
                 <div class="container flex flex-col md:flex-row justify-between items-center mx-auto">
                     <div class="space-x-6">
-                        <a href="index.html" class="py-2 text-white font-poppins">Home</a>
+                        <a href="index.php" class="py-2 text-white font-poppins">Home</a>
                         <a href="#" class=" py-2 text-white font-poppins">Services</a>
                         <a href="#" class="py-2 text-white font-poppins">About</a>
                         <a href="#" class="py-2 hover\:text-white font-poppins">Contact</a>
@@ -261,7 +314,7 @@
                 <div class="w-full mx-auto p-2">
                     <!-- Links -->
                     <ul class="w-full flex flex-col text-gray-700 list-none text-left">
-                        <li class="py-2"><a href="#" class=text-white font-poppins">Home</a>
+                        <li class="py-2"><a href="index.php" class="text-white font-poppins">Home</a>
                         </li>
                         <li class="py-2"><a href="#" class="text-white font-poppins">Services</a>
                         </li>

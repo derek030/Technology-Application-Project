@@ -23,11 +23,53 @@ if (isset($_GET['email'])) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="styles.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>My Pets</title>
 </head>
 
 <body>
+    <!-- Toast message -->
+    <div class="fixed top-4 right-4 flex flex-col-reverse items-end">
+        <!-- Error -->
+        <div id="error-toast"
+            class='flex items-center text-white max-w-sm w-full bg-red-400 shadow-md rounded-lg overflow-hidden mx-auto hidden'>
+            <div class='w-10 border-r px-2'>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636">
+                    </path>
+                </svg>
+            </div>
+
+            <div class='flex items-center px-2 py-3'>
+                <div class='mx-3'>
+                    <p id="error-content"></p>
+                </div>
+            </div>
+        </div>
+        <!-- Success -->
+        <div id="success-toast"
+            class='flex items-center text-white max-w-sm w-full bg-green-400 shadow-md rounded-lg overflow-hidden mx-auto hidden'>
+            <div class='w-10 border-r px-2'>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z">
+                    </path>
+                </svg>
+            </div>
+
+            <div class='flex items-center px-2 py-3'>
+                <div class='mx-3'>
+                    <p id="success-content"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main nav bar -->
     <nav>
         <!-- Main nav bar - Desktop -->
@@ -119,11 +161,9 @@ if (isset($_GET['email'])) {
                                 </div>
 
                                 <div class="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
-                                    <button type="button"
-                                        class="bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full px-5 py-2.5 text-center inline-flex items-center mr-2 mb-2 font-poppins">
-                                        <img class="mr-2" src="img/edit--add-plus.svg" alt="">
-                                        Add New Pet
-                                    </button>
+                                    <a href="mypetedit.php?action=add"
+                                        class="bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full px-5 py-2.5 text-center inline-flex items-center mr-2 mb-2 font-poppins"><img
+                                            class="mr-2" src="img/edit--add-plus.svg" alt=""> Add New Pet</a>
                                 </div>
                             </div>
                         </div>
@@ -131,7 +171,7 @@ if (isset($_GET['email'])) {
 
                     <div class="mx-auto max-w-xl pt-3 lg:max-w-7xl">
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div id="pets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             <!-- Card 1 -->
                             <div class="grid gap-4">
                                 <div class="p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
@@ -178,97 +218,7 @@ if (isset($_GET['email'])) {
                                 </div>
                             </div>
 
-                            <!-- Card 2 -->
-                            <div class="grid gap-4">
-                                <div class="p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-                                    <img class="rounded-lg object-cover w-full h-52"
-                                        src="https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80"
-                                        alt="" />
-                                    <h2 class="font-bold text-darkblue-primary font-poppins mt-4">Noodle</h2>
-                                    <!-- Details -->
-                                    <dl class="divide-y divide-gray-100">
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Gender:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                Male</dd>
-                                        </div>
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Age:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                3 years</dd>
-                                        </div>
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Breed:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                Golden Retriever</dd>
-                                        </div>
-                                    </dl>
-                                    <div class="py-4">
-                                        <button
-                                            class="w-full h-12 px-6 text-white bg-darkblue-primary rounded-full font-poppins text-sm">Book
-                                            Appointment</button>
-                                    </div>
-                                    <div class="pb-4">
-                                        <button
-                                            class="w-full h-12 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full font-poppins text-sm">Edit</button>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Card 3 -->
-                            <div class="grid gap-4">
-                                <div class="p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-                                    <img class="rounded-lg object-cover w-full h-52"
-                                        src="https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80"
-                                        alt="" />
-                                    <h2 class="font-bold text-darkblue-primary font-poppins mt-4">Noodle</h2>
-                                    <!-- Details -->
-                                    <dl class="divide-y divide-gray-100">
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Gender:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                Male</dd>
-                                        </div>
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Age:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                3 years</dd>
-                                        </div>
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Breed:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                Golden Retriever</dd>
-                                        </div>
-                                    </dl>
-                                    <div class="py-4">
-                                        <button
-                                            class="w-full h-12 px-6 text-white bg-darkblue-primary rounded-full font-poppins text-sm">Book
-                                            Appointment</button>
-                                    </div>
-                                    <div class="pb-4">
-                                        <button
-                                            class="w-full h-12 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full font-poppins text-sm">Edit</button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                     </div>
