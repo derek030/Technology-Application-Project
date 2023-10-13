@@ -69,6 +69,9 @@ ALTER TABLE `pet`
 --
 ALTER TABLE `pet`
   ADD CONSTRAINT `fk_owner` FOREIGN KEY (`owner`) REFERENCES `customer` (`email`);
+
+ALTER TABLE `pet` ADD `ageUnit` ENUM('Y','W') NOT NULL AFTER `age`;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
