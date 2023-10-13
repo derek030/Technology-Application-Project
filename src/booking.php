@@ -4,6 +4,9 @@ session_start();
 
 include 'databaseConfig.php';
 
+if (isset($_GET['petname'])) {
+    echo '<script>console.log("petname is ' . $_GET['petname'] . '");</script>';
+}
 ?>
 
 <!DOCTYPE html>
@@ -78,7 +81,7 @@ include 'databaseConfig.php';
 
                     <!-- Left nav -->
                     <div class="hidden md:flex items-center space-x-1">
-                        <a href="index.html" class="py-5 px-3 text-darkblue-primary font-poppins font-medium">Home</a>
+                        <a href="index.php" class="py-5 px-3 text-darkblue-primary font-poppins font-medium">Home</a>
                         <a href="#" class="py-5 px-3 text-darkblue-primary font-poppins font-medium">Services</a>
                         <a href="#" class="py-5 px-3 text-darkblue-primary font-poppins font-medium">About</a>
                         <a href="#" class="py-5 px-3 text-darkblue-primary font-poppins font-medium">Contact</a>
@@ -87,10 +90,10 @@ include 'databaseConfig.php';
 
                 <!-- Right nav -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="mypets.html"
+                    <a href="mypets.php"
                         class="py-2.5 px-6 bg-darkblue-primary text-white rounded-full font-poppins font-medium">My
                         Profile</a>
-                    <a href=""
+                    <a href="logout.php"
                         class="py-2.5 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary font-medium rounded-full font-poppins">Logout</a>
                 </div>
 
@@ -110,12 +113,12 @@ include 'databaseConfig.php';
 
         <!-- Main nav bar - Mobile -->
         <div class="mobile-menu hidden md:hidden">
-            <a href="index.html" class="block py-2 px-6 text-darkblue-primary font-poppins">Home</a>
+            <a href="index.php" class="block py-2 px-6 text-darkblue-primary font-poppins">Home</a>
             <a href="#" class="block py-2 px-6 text-darkblue-primary font-poppins">Services</a>
             <a href="#" class="block py-2 px-6  text-darkblue-primary font-poppins">About</a>
             <a href="#" class="block py-2 px-6  text-darkblue-primary font-poppins">Contact</a>
-            <a href="mypets.html" class="block py-2 px-6  text-darkblue-primary font-poppins">My Profile</a>
-            <a href="#" class="block py-2 px-6  text-darkblue-primary font-poppins">Logout</a>
+            <a href="mypets.php" class="block py-2 px-6  text-darkblue-primary font-poppins">My Profile</a>
+            <a href="logout.php" class="block py-2 px-6  text-darkblue-primary font-poppins">Logout</a>
         </div>
     </nav>
 
@@ -134,30 +137,31 @@ include 'databaseConfig.php';
                     <form class="space-y-6" action="#" method="POST">
                         <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
                             <div class="sm:col-span-full">
-                                <label for="pet-name"
+                                <label for="petNameField"
                                     class="block text-sm font-medium leading-6 text-darkblue-primary">Pet Name</label>
                                 <div class="mt-2">
-                                    <input id="pet-name" name="pet-name" type="pet-name" placeholder="Name"
-                                        class="block w-full rounded-md border-0 px-4 py-3.5  text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
+                                    <input id="petNameField" name="petNameField" type="text" placeholder="Name"
+                                        class="block w-full rounded-md border-0 px-4 py-3.5  text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins"
+                                        value="<?php echo isset($_GET['petname']) ? $_GET['petname'] : ''; ?>" readonly>
                                 </div>
                             </div>
-
+                            <!-- Booking Date -->
                             <div class="sm:col-span-3">
-                                <label for="booking-date"
+                                <label for="bookingDateField"
                                     class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">Booking
                                     Date</label>
                                 <div class="mt-2">
-                                    <input type="text" name="booking-date" id="booking-date" placeholder="Date"
+                                    <input type="date" name="bookingDateField" id="bookingDateField" placeholder="Date"
                                         class="block w-full rounded-md border-0 px-4 py-3.5 text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                                 </div>
                             </div>
-
+                            <!-- Booking Time options -->
                             <div class="sm:col-span-3">
-                                <label for="booking-time"
+                                <label for="bookingTimeField"
                                     class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">Booking
                                     Time</label>
                                 <div class="mt-2">
-                                    <select id="booking-time" name="booking-time" placeholder="Time"
+                                    <select id="bookingTimeField" name="bookingTimeField" placeholder="Time"
                                         class="block w-full rounded-md border-0 px-4 py-3.5  text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:max-w-xs sm:text-sm sm:leading-6 font-poppins">
                                         <option>Select Time</option>
                                         <option>09:00</option>
@@ -172,48 +176,48 @@ include 'databaseConfig.php';
                                     </select>
                                 </div>
                             </div>
-
+                            <!-- Service options -->
                             <div class="sm:col-span-full">
                                 <h3 class="block font-bold leading-9 tracking-tight text-darkblue-primary font-poppins">
                                     Services</h3>
                                 <div class="flex h-6 items-center">
-                                    <input id="service-1" name="service-1" type="checkbox"
-                                        class="h-4 w-4 rounded border-gray-300 text-darkblue-primary focus:ring-darkblue-primary">
+                                    <input id="service-1" name="service     1" type="checkbox"
+                                        class="service-checkbox h-4 w-4 rounded border-gray-300 text-darkblue-primary focus:ring-darkblue-primary">
                                     <label for="service-1"
                                         class="m-2 block text-sm font-medium leading-6 font-poppins ">Service
                                         1</label>
                                 </div>
                                 <div class="flex h-6 items-center">
-                                    <input id="service-2" name="service-2" type="checkbox"
-                                        class="h-4 w-4 rounded border-gray-300 text-darkblue-primary focus:ring-darkblue-primary">
+                                    <input id="service-2" name="service 2" type="checkbox"
+                                        class="service-checkbox h-4 w-4 rounded border-gray-300 text-darkblue-primary focus:ring-darkblue-primary">
                                     <label for="service-2"
                                         class="m-2 block text-sm font-medium leading-6 font-poppins ">Service
                                         2</label>
                                 </div>
                                 <div class="flex h-6 items-center">
-                                    <input id="service-3" name="service-3" type="checkbox"
-                                        class="h-4 w-4 rounded border-gray-300 text-darkblue-primary focus:ring-darkblue-primary">
+                                    <input id="service-3" name="service 3" type="checkbox"
+                                        class="service-checkbox h-4 w-4 rounded border-gray-300 text-darkblue-primary focus:ring-darkblue-primary">
                                     <label for="service-3"
                                         class="m-2 block text-sm font-medium leading-6 font-poppins">Service
                                         3</label>
                                 </div>
                                 <div class="flex h-6 items-center">
-                                    <input id="service-4" name="service-4" type="checkbox"
-                                        class="h-4 w-4 rounded border-gray-300 text-darkblue-primary focus:ring-darkblue-primary">
+                                    <input id="service-4" name="service 4" type="checkbox"
+                                        class="service-checkbox h-4 w-4 rounded border-gray-300 text-darkblue-primary focus:ring-darkblue-primary">
                                     <label for="service-4"
                                         class="m-2 block text-sm font-medium leading-6 font-poppins">Service
                                         4</label>
                                 </div>
                                 <div class="flex h-6 items-center">
-                                    <input id="service-5" name="service-5" type="checkbox"
-                                        class="h-4 w-4 rounded border-gray-300 text-darkblue-primary focus:ring-darkblue-primary">
+                                    <input id="service-5" name="service 5" type="checkbox"
+                                        class="service-checkbox h-4 w-4 rounded border-gray-300 text-darkblue-primary focus:ring-darkblue-primary">
                                     <label for="service-5"
                                         class="m-2 block text-sm font-medium leading-6 font-poppins">Service
                                         5</label>
                                 </div>
                                 <div class="flex h-6 items-center">
-                                    <input id="service-6" name="service-6" type="checkbox"
-                                        class="h-4 w-4 rounded border-gray-300 text-darkblue-primary focus:ring-darkblue-primary">
+                                    <input id="service-6" name="service 6" type="checkbox"
+                                        class="service-checkbox h-4 w-4 rounded border-gray-300 text-darkblue-primary focus:ring-darkblue-primary">
                                     <label for="service-6"
                                         class="m-2 block text-sm font-medium leading-6 font-poppins">Service
                                         6</label>
@@ -224,8 +228,9 @@ include 'databaseConfig.php';
                                 <h3 class="block font-bold leading-9 tracking-tight text-darkblue-primary font-poppins">
                                     Payment</h3>
                                 <div class="p-6 bg-gray-100 rounded">
-                                    <ul role="list" class="divide-y divide-gray-300">
-                                        <li class="py-3 sm:py-4">
+                                    <ul role="list" class="divide-y divide-gray-300" id="payment-list">
+                                        <!-- Services will be dynamically added here -->
+                                        <!-- <li class="py-3 sm:py-4">
                                             <div class="flex items-center space-x-4">
                                                 <div class="flex-1 min-w-0">
                                                     <p class="font-poppins leading-6 font-medium text-darkblue-primary">
@@ -237,21 +242,7 @@ include 'databaseConfig.php';
                                                     $100.00
                                                 </div>
                                             </div>
-                                        </li>
-
-                                        <li class="py-3 sm:py-4">
-                                            <div class="flex items-center space-x-4">
-                                                <div class="flex-1 min-w-0">
-                                                    <p class="font-poppins leading-6 font-medium text-darkblue-primary">
-                                                        Service Name
-                                                    </p>
-                                                </div>
-                                                <div
-                                                    class="inline-flex items-center text-base font-semibold font-poppins text-darkblue-primary">
-                                                    $100.00
-                                                </div>
-                                            </div>
-                                        </li>
+                                        </li> -->
 
                                         <!-- Total -->
                                         <li class="py-3 sm:py-4">
@@ -262,9 +253,9 @@ include 'databaseConfig.php';
                                                         Total Payment Amount
                                                     </p>
                                                 </div>
-                                                <div
+                                                <div id="total-amount"
                                                     class="inline-flex items-center text-base font-bold font-poppins text-darkblue-primary">
-                                                    $200.00
+                                                    $0.00
                                                 </div>
                                             </div>
                                         </li>
@@ -299,7 +290,7 @@ include 'databaseConfig.php';
                                 <label for="expiration"
                                     class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">Expiration</label>
                                 <div class="mt-2">
-                                    <input id="expiration" name="expiration" type="text" placeholder="MM / YY"
+                                    <input id="expiration" name="expiration" type="text" placeholder="MM/YY"
                                         class="block w-full rounded-md border-0 px-4 py-3.5 text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                                 </div>
                             </div>
@@ -330,7 +321,7 @@ include 'databaseConfig.php';
                 <div class="mx-auto max-w-6xl">
                     <div class="container flex flex-col md:flex-row justify-between items-center mx-auto">
                         <div class="space-x-6">
-                            <a href="#" class="py-2 text-white font-poppins">Home</a>
+                            <a href="index.php" class="py-2 text-white font-poppins">Home</a>
                             <a href="#" class=" py-2 text-white font-poppins">Services</a>
                             <a href="#" class="py-2 text-white font-poppins">About</a>
                             <a href="#" class="py-2 hover\:text-white font-poppins">Contact</a>
@@ -379,7 +370,7 @@ include 'databaseConfig.php';
                     <div class="w-full mx-auto p-2">
                         <!-- Links -->
                         <ul class="w-full flex flex-col text-gray-700 list-none text-left">
-                            <li class="py-2"><a href="#" class=text-white font-poppins">Home</a>
+                            <li class="py-2"><a href="index.php" class="text-white font-poppins">Home</a>
                             </li>
                             <li class="py-2"><a href="#" class="text-white font-poppins">Services</a>
                             </li>
@@ -439,13 +430,165 @@ include 'databaseConfig.php';
 
         <!-- Javascript -->
         <script>
-            const btn = document.querySelector("button.mobile-menu-button");
-            const menu = document.querySelector(".mobile-menu");
+            $(document).ready(function () {
+                const btn = document.querySelector("button.mobile-menu-button");
+                const menu = document.querySelector(".mobile-menu");
 
-            // add event listeners
-            btn.addEventListener("click", () => {
-                menu.classList.toggle("hidden");
+                // add event listeners
+                btn.addEventListener("click", () => {
+                    menu.classList.toggle("hidden");
+                });
+
+                // A function to handle checkbox change events
+                function handleCheckboxChange(event) {
+                    const selectedServices = getSelectedServices();
+                    updatePaymentSection(selectedServices);
+                }
+
+                // Add change event listeners to each checkbox
+                const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', handleCheckboxChange);
+                });
+
+                // Function to get selected services
+                function getSelectedServices() {
+                    const selectedServices = [];
+                    checkboxes.forEach(checkbox => {
+                        if (checkbox.checked) {
+                            selectedServices.push(checkbox.name); // Use the name of the checkbox as the service name
+                        }
+                    });
+                    return selectedServices;
+                }
+
+                function updatePaymentSection(selectedServices) {
+                    const paymentList = document.getElementById('payment-list');
+                    let totalAmount = 0;
+
+                    // Clear the existing service items except the total amount section
+                    const paymentItems = paymentList.querySelectorAll('li');
+                    for (let i = 0; i < paymentItems.length - 1; i++) {
+                        paymentList.removeChild(paymentItems[i]);
+                    }
+
+                    // Add service items for selected services
+                    selectedServices.forEach(service => {
+                        const serviceItem = document.createElement('li');
+                        serviceItem.className = 'py-3 sm:py-4';
+                        serviceItem.innerHTML = `
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-poppins leading-6 font-medium text-darkblue-primary">
+                                        ${service} <!-- Insert service name here -->
+                                    </p>
+                                </div>
+                                <div class="inline-flex items-center text-base font-semibold font-poppins text-darkblue-primary">
+                                    $100.00 <!-- Insert service price here -->
+                                </div>
+                            </div>
+                        `;
+
+                        paymentList.insertBefore(serviceItem, paymentItems[paymentItems.length - 1]);
+
+                        // Calculate the total amount
+                        totalAmount += 100.00; // Update this with the actual service price
+                    });
+
+                    // Update the total amount in the payment section
+                    const totalAmountElement = document.getElementById('total-amount');
+                    totalAmountElement.textContent = `$${totalAmount.toFixed(2)}`;
+                }
+
+                // Function to validate a credit card number (simple check for numeric characters)
+                function isValidCardNumber(cardNumber) {
+                    return /^\d+$/.test(cardNumber);
+                }
+
+                // Function to validate the expiration date (simple check for MM / YY format)
+                function isValidExpiration(expiration) {
+                    return /^\d{2}\/\d{2}$/.test(expiration);
+                }
+
+                // Function to validate CVC (simple check for 3 or 4 numeric characters)
+                function isValidCVC(cvc) {
+                    return /^\d{3,4}$/.test(cvc);
+                }
+
+                const bookingBtn = document.getElementById("bookingBtn");
+                bookingBtn.addEventListener("click", function () {
+                    // Get references to the input fields
+                    const petNameField = document.getElementById("petNameField");
+                    const bookingDateField = document.getElementById("bookingDateField");
+                    const bookingTimeField = document.getElementById("bookingTimeField");
+                    const cardNumber = document.getElementById("card-number");
+                    const cardholderName = document.getElementById("cardholder-name");
+                    const expiration = document.getElementById("expiration");
+                    const cvc = document.getElementById("cvc");
+
+                    // Get the selected services
+                    const selectedServices = getSelectedServices();
+
+                    // Perform validation
+                    if (petNameField.value.trim() === "") {
+                        showToast("Pet Name is required");
+                        return;
+                    }
+                    if (bookingDateField.value === "") {
+                        showToast("Booking Date is required");
+                        return;
+                    }
+                    if (bookingTimeField.value === "Select Time") {
+                        showToast("Please select a Booking Time");
+                        return;
+                    }
+                    if (selectedServices.length === 0) {
+                        showToast("Please select at least one service");
+                        return;
+                    }
+                    if (cardNumber.value.trim() === "" || !isValidCardNumber(cardNumber.value)) {
+                        showToast("Invalid Card Number");
+                        return;
+                    }
+                    if (cardholderName.value.trim() === "") {
+                        showToast("Cardholder Name is required");
+                        return;
+                    }
+                    if (expiration.value.trim() === "" || !isValidExpiration(expiration.value)) {
+                        showToast("Invalid Expiration Date");
+                        return;
+                    }
+                    if (cvc.value.trim() === "" || !isValidCVC(cvc.value)) {
+                        showToast("Invalid CVC");
+                        return;
+                    }
+
+                    // If all fields are valid, you can submit the form here
+                    // Replace this with your form submission logic
+                    // For example: document.querySelector("form").submit();
+                    console.log("valid form");
+                });
+
+                function showToast(message) {
+                    const errorToast = document.getElementById('error-toast');
+                    const errorContent = document.getElementById('error-content');
+                    // Replace \n with <br> for line breaks
+                    message = message.replace(/\n/g, '<br>');
+                    errorContent.innerHTML = message;
+                    errorToast.classList.remove('hidden');
+
+                    // Automatically hide the toast after 10 seconds (10000 milliseconds)
+                    setTimeout(hideToast, 10000);
+                }
+
+                function hideToast() {
+                    const errorToast = document.getElementById('error-toast');
+                    errorToast.classList.add('hidden');
+                }
+
             });
+
+
         </script>
 </body>
 
