@@ -52,6 +52,7 @@ ALTER TABLE `payment`
 --
 ALTER TABLE `payment`
   ADD CONSTRAINT `booking_ref` FOREIGN KEY (`amount`) REFERENCES `booking` (`bookingref`);
+DROP TABLE payment;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
