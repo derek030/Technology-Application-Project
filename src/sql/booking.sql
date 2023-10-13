@@ -56,6 +56,9 @@ ALTER TABLE `booking`
 --
 ALTER TABLE `booking`
   MODIFY `bookingref` int(8) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE booking ADD payment double NOT NULL;
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
