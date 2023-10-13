@@ -19,10 +19,11 @@ if ($_POST === null) {
     $cardholderName = $_POST['cardholder-name'];
     $expiration = $_POST['expiration'];
     $cvc = $_POST['cvc'];
+    $paymentAmount = $_POST['payment-amount']; // Added to get payment amount
 
     // Example: Inserting into a bookings table
-    $sqlstring = "INSERT INTO bookings (pet_name, booking_date, booking_time, services, card_number, cardholder_name, expiration, cvc) 
-         VALUES ('$petName', '$bookingDate', '$bookingTime', '" . implode(", ", $services) . "', '$cardNumber', '$cardholderName', '$expiration', '$cvc')";
+    $sqlstring = "INSERT INTO bookings (pet_name, booking_date, booking_time, services, card_number, cardholder_name, expiration, cvc, payment) 
+         VALUES ('$petName', '$bookingDate', '$bookingTime', '" . implode(", ", $services) . "', '$cardNumber', '$cardholderName', '$expiration', '$cvc', '$paymentAmount')";
     $result = mysqli_query($conn, $sqlstring);
 
     if ($result) {
@@ -31,6 +32,7 @@ if ($_POST === null) {
             "bookingDate" => $bookingDate,
             "bookingTime" => $bookingTime,
             "services" => $services,
+            "paymentAmount" => $paymentAmount
         );
         $response_data = array(
             "message" => "Booking successful.",
@@ -41,7 +43,7 @@ if ($_POST === null) {
     }
 }
 
-header('Content-Type: application/json'); // Fix the header
+header('Content-Type: application/json');
 echo json_encode($response_data);
 mysqli_close($conn);
 ?>
