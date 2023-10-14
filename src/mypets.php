@@ -99,7 +99,7 @@ if (isset($_GET['customer'])) {
 
                 <!-- Right nav -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="mypets.php"
+                    <a href="mypets.php?loggedin=1&email=<?php echo urlencode($_SESSION['email']); ?>&customer=<?php echo urlencode($_SESSION['customer']); ?>"
                         class="py-2.5 px-6 bg-darkblue-primary text-white rounded-full font-poppins font-medium">My
                         Profile</a>
                     <a href="logout.php"
@@ -174,7 +174,7 @@ if (isset($_GET['customer'])) {
                         </div>
                     </header>
 
-                   
+
                     <div id="pets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
 
                 </div>
@@ -384,12 +384,13 @@ if (isset($_GET['customer'])) {
 
                                 // Add click event handlers to the buttons
                                 bookingButton.addEventListener('click', function () {
-                                    // Redirect to another page with the pet's name as a query parameter
+                                    // Redirect to booking page
                                     window.location.href = 'booking.php?email=' + encodeURIComponent(email) + '&customer=' + encodeURIComponent(customer) + '&petname=' + encodeURIComponent(pet.name);
                                 });
 
                                 editButton.addEventListener('click', function () {
-                                    // Handle the "Edit" button click as required
+                                    // Redirect to edit pet profile page
+                                    window.location.href = 'mypetedit.php?action=edit&petid=' + encodeURIComponent(pet.id);
                                 });
 
                                 // Append the elements to the pet card

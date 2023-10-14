@@ -91,7 +91,7 @@ if (isset($_GET['petname'])) {
 
                 <!-- Right nav -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="mypets.php"
+                    <a href="mypets.php?loggedin=1&email=<?php echo urlencode($_SESSION['email']); ?>&customer=<?php echo urlencode($_SESSION['customer']); ?>"
                         class="py-2.5 px-6 bg-darkblue-primary text-white rounded-full font-poppins font-medium">My
                         Profile</a>
                     <a href="logout.php"
