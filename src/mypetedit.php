@@ -118,7 +118,8 @@ if (isset($_GET['action'])) {
             <a href="#" class="block py-2 px-6 text-darkblue-primary font-poppins">Services</a>
             <a href="#" class="block py-2 px-6  text-darkblue-primary font-poppins">About</a>
             <a href="#" class="block py-2 px-6  text-darkblue-primary font-poppins">Contact</a>
-            <a href="mypets.php" class="block py-2 px-6  text-darkblue-primary font-poppins">My Profile</a>
+            <a href="mypets.php?loggedin=1&email=<?php echo urlencode($_SESSION['email']); ?>&customer=<?php echo urlencode($_SESSION['customer']); ?>"
+                class="block py-2 px-6  text-darkblue-primary font-poppins">My Profile</a>
             <a href="logout.php" class="block py-2 px-6  text-darkblue-primary font-poppins">Logout</a>
         </div>
     </nav>
