@@ -134,7 +134,7 @@ if (isset($_GET['customer'])) {
     <!-- Body Container -->
     <div class="flex flex-col h-screen justify-between">
         <!-- Main Content -->
-        <div class="max-w-6xl mx-auto px-4 py-6">
+        <div class="container max-w-6xl mx-auto px-4 py-6">
             <div class="mt-8 lg:flex lg:gap-x-16">
                 <!-- Side Menu -->
                 <div class="lg:w-1/4 lg:block mt-16">
@@ -173,11 +173,9 @@ if (isset($_GET['customer'])) {
                         </div>
                     </header>
 
-                    <div class="mx-auto max-w-xl pt-3 lg:max-w-7xl">
+                   
+                    <div id="pets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
 
-                        <div id="pets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-
-                    </div>
                 </div>
             </div>
         </div>
@@ -323,60 +321,85 @@ if (isset($_GET['customer'])) {
 
                         if (response.data.length > 0) {
                             response.data.forEach(pet => {
+
                                 // Create a div element for the pet card
                                 const petCard = document.createElement('div');
-                                petCard.classList.add('grid', 'gap-4');
+                                petCard.classList.add('p-4', 'max-w-sm', 'bg-white', 'border', 'border-gray-200', 'rounded-lg', 'shadow');
 
-                                // Determine the age unit text based on the ageUnit value
+
+                                // Create an image element
+                                const image = document.createElement('img');
+                                image.classList.add('rounded-lg', 'object-cover', 'w-full', 'h-52');
+                                image.src = pet.photo;
+                                image.alt = pet.name;
+
+                                // Create an h2 element for the pet's name
+                                const petName = document.createElement('h2');
+                                petName.classList.add('font-bold', 'text-darkblue-primary', 'font-poppins', 'mt-4');
+                                petName.textContent = pet.name;
+
+                                // Create a dl element for the details
+                                const detailsList = document.createElement('dl');
+                                detailsList.classList.add('divide-y', 'divide-gray-100');
+
+                                // Create detail elements
                                 const ageUnitText = pet.ageUnit === "Y" ? "years" : pet.ageUnit === "W" ? "weeks" : "units";
+                                const detailElements = [
+                                    { term: 'Gender:', value: pet.gender },
+                                    { term: 'Age:', value: `${pet.age} ${ageUnitText}` },
+                                    { term: 'Breed:', value: pet.breed },
+                                ];
 
-                                // Populate the pet card with data from the API response
-                                petCard.innerHTML = `                                
-                                <div class="p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-                                    <img class="rounded-lg object-cover w-full h-52" src="${pet.photo}" alt="${pet.name}" />
-                                    <h2 class="font-bold text-darkblue-primary font-poppins mt-4">${pet.name}</h2>
-                                    <!-- Details -->
-                                    <dl class="divide-y divide-gray-100">
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">Gender:</dt>
-                                            <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">${pet.gender}</dd>
-                                        </div>
-                                        <!-- Include age and breed in a similar manner -->
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">Age:</dt>
-                                            <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">${pet.age} ${ageUnitText}</dd>
-                                        </div>
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">Breed:</dt>
-                                            <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">${pet.breed}</dd>
-                                        </div>
-                                    </dl>
-                                    <div class="py-4">
-                                        <button id="bookingBtn" class="w-full h-12 px-6 text-white bg-darkblue-primary rounded-full font-poppins text-sm">Book Appointment</button>
-                                    </div>
-                                    <div class="pb-4">
-                                        <button id="editBtn" class="w-full h-12 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full font-poppins text-sm">Edit</button>
-                                    </div>
-                                </div>
-                            `;
+                                detailElements.forEach(detail => {
+                                    // Create a div for each detail
+                                    const detailDiv = document.createElement('div');
+                                    detailDiv.classList.add('xl:px-4', 'py-2', 'sm:grid', 'sm:grid-cols-3', 'sm:gap-4', 'sm:px-0');
 
-                                // Append the pet card to the pet container
-                                petContainer.appendChild(petCard);
+                                    // Create dt and dd elements for the detail
+                                    const dt = document.createElement('dt');
+                                    dt.classList.add('font-poppins', 'leading-6', 'font-medium', 'text-neutral-60');
+                                    dt.textContent = detail.term;
 
-                                // Get the "Book Appointment" button and "Edit" button by their IDs
-                                const bookAppointmentButton = petCard.querySelector('#bookingBtn');
-                                const editButton = petCard.querySelector('#editBtn');
+                                    const dd = document.createElement('dd');
+                                    dd.classList.add('mt-1', 'leading-6', 'text-neutral-60', 'sm:col-span-2', 'sm:mt-0', 'font-poppins');
+                                    dd.textContent = detail.value;
 
-                                // Add a click event handler to the "Book Appointment" button
-                                bookAppointmentButton.addEventListener('click', function () {
+                                    // Append dt and dd to the detail div
+                                    detailDiv.appendChild(dt);
+                                    detailDiv.appendChild(dd);
+
+                                    // Append the detail div to the details list
+                                    detailsList.appendChild(detailDiv);
+                                });
+
+                                // Create buttons for booking and editing
+                                const bookingButton = document.createElement('button');
+                                bookingButton.classList.add('mb-2', 'w-full', 'h-12', 'px-6', 'text-white', 'bg-darkblue-primary', 'rounded-full', 'font-poppins', 'text-sm');
+                                bookingButton.textContent = 'Book Appointment';
+
+                                const editButton = document.createElement('button');
+                                editButton.classList.add('w-full', 'h-12', 'px-6', 'bg-transparent', 'text-darkblue-primary', 'border', 'border-darkblue-primary', 'rounded-full', 'font-poppins', 'text-sm');
+                                editButton.textContent = 'Edit';
+
+                                // Add click event handlers to the buttons
+                                bookingButton.addEventListener('click', function () {
                                     // Redirect to another page with the pet's name as a query parameter
                                     window.location.href = 'booking.php?email=' + encodeURIComponent(email) + '&customer=' + encodeURIComponent(customer) + '&petname=' + encodeURIComponent(pet.name);
                                 });
 
-                                // Add a click event handler to the "Edit" button (you can customize this as needed)
                                 editButton.addEventListener('click', function () {
                                     // Handle the "Edit" button click as required
                                 });
+
+                                // Append the elements to the pet card
+                                petCard.appendChild(image);
+                                petCard.appendChild(petName);
+                                petCard.appendChild(detailsList);
+                                petCard.appendChild(bookingButton);
+                                petCard.appendChild(editButton);
+
+                                // Append the pet card to the pet container
+                                petContainer.appendChild(petCard);
 
                             });
 
@@ -385,7 +408,7 @@ if (isset($_GET['customer'])) {
                             const noPetRecordMessage = document.createElement('div');
                             noPetRecordMessage.classList.add('col-span-3', 'lg:col-span-full');
                             noPetRecordMessage.innerHTML = `
-                                <p class="font-poppins">No pet record</p>
+                                    < p class= "font-poppins" > No pet record</p >
                             `;
 
                             // Append the "No pet record" message to the pet container
@@ -400,8 +423,6 @@ if (isset($_GET['customer'])) {
                     console.log(error);
                 }
             });
-
-
         });
     </script>
 </body>
