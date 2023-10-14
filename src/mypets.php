@@ -4,13 +4,17 @@ session_start();
 
 include 'databaseConfig.php';
 
-// Check if the user is already logged in, if yes then redirect him to welcome page
+// Check if the user is already logged in
 if (isset($_GET['loggedin']) && $_GET['loggedin'] == 1) {
     $_SESSION['loggedin'] = 1;
 }
 
 if (isset($_GET['email'])) {
     $_SESSION['email'] = $_GET['email'];
+}
+
+if (isset($_GET['customer'])) {
+    $_SESSION['customer'] = $_GET['customer'];
 }
 ?>
 
@@ -172,6 +176,7 @@ if (isset($_GET['email'])) {
                     <div class="mx-auto max-w-xl pt-3 lg:max-w-7xl">
 
                         <div id="pets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
                             <!-- Card 1 -->
                             <div class="grid gap-4">
                                 <div class="p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
@@ -217,7 +222,6 @@ if (isset($_GET['email'])) {
                                     </div>
                                 </div>
                             </div>
-
 
                         </div>
 

@@ -9,7 +9,7 @@ if ($conn->connect_error) {
     );
 } else {
     // Query to get all pet data
-    $query = "SELECT * FROM pet"; // Updated table name to "pet"
+    $query = "SELECT * FROM pet WHERE owner = '$email'"; // Updated table name to "pet"
     $result = $conn->query($query);
 
     if ($result) {

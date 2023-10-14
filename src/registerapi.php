@@ -37,7 +37,7 @@ if ($_POST === null) {
         if ($result) {
             $result_data = array(
                 "customer" => $fname . ' ' . $lname,
-                "Email" => $email
+                "email" => $email
             );
             $response_data = array(
                 "message" => "Successfully registered. Please Login.",

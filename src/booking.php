@@ -7,6 +7,7 @@ include 'databaseConfig.php';
 if (isset($_GET['petname'])) {
     echo '<script>console.log("petname is ' . $_GET['petname'] . '");</script>';
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -269,7 +270,8 @@ if (isset($_GET['petname'])) {
                                     class="block text-sm font-medium leading-6 text-darkblue-primary">Card
                                     Number</label>
                                 <div class="mt-2">
-                                    <input id="card-number" name="card-number" type="text" placeholder="Card Number"
+                                    <input id="card-number" name="card-number" type="text"
+                                        placeholder="1234 1234 1234 1234"
                                         class="block w-full rounded-md border-0 px-4 py-3.5  text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                                 </div>
                             </div>
@@ -529,6 +531,9 @@ if (isset($_GET['petname'])) {
                     // Get the selected services
                     const selectedServices = getSelectedServices();
 
+                    // Get the total amount
+                    const totalAmount = document.getElementById('total-amount').textContent;
+
                     // Perform validation
                     if (petNameField.value.trim() === "") {
                         showToast("Pet Name is required");
@@ -563,10 +568,40 @@ if (isset($_GET['petname'])) {
                         return;
                     }
 
-                    // If all fields are valid, you can submit the form here
-                    // Replace this with your form submission logic
-                    // For example: document.querySelector("form").submit();
-                    console.log("valid form");
+                    // If all fields are valid, call API
+                    $.ajax({
+                        url: 'bookingapi.php',
+                        method: 'POST',
+                        data: {
+                            customerName: "<?php echo $_GET['customer']; ?>",
+                            email: "<?php echo $_GET['email']; ?>",
+                            petName: petNameField.value,
+                            bookingDate: bookingDateField.value,
+                            bookingTime: bookingTimeField.value,
+                            service: selectedServices.join(', '),
+                            amount: parseFloat(totalAmount.replace(/[$,]/g, '')),
+                            payment: "successful", // represent whether the payment through the payment gateway was successful or not.
+                        },
+                        success: function (response) {
+                            // Handle the AJAX success response
+                            console.log(response);
+                            if (response.data) {
+                                // show success message for 3 seconds, then redirect to the portfolio page
+                                const successToast = document.getElementById('success-toast');
+                                const successContent = document.getElementById('success-content');
+                                successToast.classList.remove('hidden');
+                                successContent.innerHTML = response.message;
+                                setTimeout(function () {
+                                    window.location.href = 'mypets.php?loggedin=1&email=' + response.data.email + '&customer=' + response.data.customer; // Redirect to the portfolio page
+                                }, 3000); // Wait for 3 seconds before redirecting
+                            } else {
+                                showToast(response.message);
+                            }
+                        }, error: function (error) {
+                            // Handle the AJAX error
+                            console.log(error);
+                        }
+                    });
                 });
 
                 function showToast(message) {

@@ -11,28 +11,29 @@ if ($_POST === null) {
     );
 } else {
     // Data fields should be accessed like this:
-    $petName = $_POST['pet-name'];
-    $bookingDate = $_POST['booking-date'];
-    $bookingTime = $_POST['booking-time'];
-    $services = isset($_POST['services']) ? $_POST['services'] : [];
-    $cardNumber = $_POST['card-number'];
-    $cardholderName = $_POST['cardholder-name'];
-    $expiration = $_POST['expiration'];
-    $cvc = $_POST['cvc'];
-    $paymentAmount = $_POST['payment-amount']; // Added to get payment amount
+    $customerName = $_POST['customerName'];
+    $email = $_POST['email'];
+    $petName = $_POST['petName'];
+    $bookingDate = $_POST['bookingDate'];
+    $bookingTime = $_POST['bookingTime'];
+    $service = isset($_POST['service']) ? $_POST['service'] : [];
+    $amount = $_POST['amount'];
+    $payment = $_POST['payment']; // Added to get payment amount
 
     // Example: Inserting into a bookings table
-    $sqlstring = "INSERT INTO bookings (pet_name, booking_date, booking_time, services, card_number, cardholder_name, expiration, cvc, payment) 
-         VALUES ('$petName', '$bookingDate', '$bookingTime', '" . implode(", ", $services) . "', '$cardNumber', '$cardholderName', '$expiration', '$cvc', '$paymentAmount')";
+    $sqlstring = "INSERT INTO booking (customername, email, petname, service, bookingdatetime, amount, payment) 
+         VALUES ('$customerName', '$email', '$petName', '$service', STR_TO_DATE('$bookingDate $bookingTime', '%Y-%m-%d %H:%i'), '$amount', '$payment')";
     $result = mysqli_query($conn, $sqlstring);
 
     if ($result) {
         $result_data = array(
+            "customer" => $customerName,
+            "email" => $email,
             "petName" => $petName,
             "bookingDate" => $bookingDate,
             "bookingTime" => $bookingTime,
-            "services" => $services,
-            "paymentAmount" => $paymentAmount
+            "services" => $service,
+            "paymentAmount" => $amount
         );
         $response_data = array(
             "message" => "Booking successful.",
