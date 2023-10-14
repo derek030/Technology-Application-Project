@@ -592,7 +592,7 @@ if (isset($_GET['petname'])) {
                                 successToast.classList.remove('hidden');
                                 successContent.innerHTML = response.message;
                                 setTimeout(function () {
-                                    window.location.href = 'mypets.php?loggedin=1&email=' + response.data.email + '&customer=' + response.data.customer; // Redirect to the portfolio page
+                                    window.location.href = 'mypets.php?loggedin=1&email=' + encodeURIComponent(response.data.email) + '&customer=' + encodeURIComponent(response.data.customer); // Redirect to the portfolio page
                                 }, 3000); // Wait for 3 seconds before redirecting
                             } else {
                                 showToast(response.message);

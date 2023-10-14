@@ -8,6 +8,8 @@ if ($conn->connect_error) {
         "message" => "Database connection failed."
     );
 } else {
+    $email = $_GET['email'];
+
     // Query to get all pet data
     $query = "SELECT * FROM pet WHERE owner = '$email'"; // Updated table name to "pet"
     $result = $conn->query($query);
@@ -18,8 +20,12 @@ if ($conn->connect_error) {
             $pet = array(
                 "id" => $row['id'],
                 "name" => $row['name'],
-                "type" => $row['type'],
-                "owner_id" => $row['owner_id'],
+                "age" => $row['age'],
+                "ageUnit" => $row['ageUnit'],
+                "gender" => $row['gender'],
+                "breed" => $row['breed'],
+                "photo" => $row['photo'],
+                "owner" => $row['owner'],
                 // Add other fields as needed
             );
             $pets[] = $pet;

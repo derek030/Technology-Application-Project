@@ -397,7 +397,7 @@ include 'databaseConfig.php';
                                 const successToast = document.getElementById('success-toast');
                                 successToast.classList.remove('hidden');
                                 setTimeout(function () {
-                                    window.location.href = 'mypets.php?loggedin=1&email=' + response.data.email + '&customer=' + response.data.customer; // Redirect to the portfolio page
+                                    window.location.href = 'mypets.php?loggedin=1&email=' + encodeURIComponent(response.data.email) + '&customer=' + encodeURIComponent(response.data.customer); // Redirect to the portfolio page
                                 }, 10000); // Wait for 10 seconds before redirecting
                             } else {
                                 showToast(response.message);

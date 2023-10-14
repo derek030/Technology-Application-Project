@@ -290,7 +290,7 @@ include 'databaseConfig.php';
 
                             if (response.data) {
                                 console.log(response.data.email);
-                                window.location.href = 'mypets.php?loggedin=1&email=' + response.data.email + '&customer=' + response.data.fname + ' ' + response.data.lname; // Redirect to the portfolio page
+                                window.location.href = 'mypets.php?loggedin=1&email=' + encodeURIComponent(response.data.email) + '&customer=' + encodeURIComponent(response.data.fname + ' ' + response.data.lname); // Redirect to the portfolio page
                             } else {
                                 showToast(response.message);
                             }

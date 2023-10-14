@@ -175,55 +175,7 @@ if (isset($_GET['customer'])) {
 
                     <div class="mx-auto max-w-xl pt-3 lg:max-w-7xl">
 
-                        <div id="pets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-                            <!-- Card 1 -->
-                            <div class="grid gap-4">
-                                <div class="p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-                                    <img class="rounded-lg object-cover w-full h-52"
-                                        src="https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80"
-                                        alt="" />
-                                    <h2 class="font-bold text-darkblue-primary font-poppins mt-4">Noodle</h2>
-                                    <!-- Details -->
-                                    <dl class="divide-y divide-gray-100">
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Gender:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                Male</dd>
-                                        </div>
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Age:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                3 years</dd>
-                                        </div>
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Breed:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                Golden Retriever</dd>
-                                        </div>
-                                    </dl>
-                                    <div class="py-4">
-                                        <button
-                                            class="w-full h-12 px-6 text-white bg-darkblue-primary rounded-full font-poppins text-sm">Book
-                                            Appointment</button>
-                                    </div>
-                                    <div class="pb-4">
-                                        <button
-                                            class="w-full h-12 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full font-poppins text-sm">Edit</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
+                        <div id="pets-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
 
                     </div>
                 </div>
@@ -342,12 +294,114 @@ if (isset($_GET['customer'])) {
 
     <!-- Javascript -->
     <script>
-        const btn = document.querySelector("button.mobile-menu-button");
-        const menu = document.querySelector(".mobile-menu");
+        $(document).ready(function () {
+            const btn = document.querySelector("button.mobile-menu-button");
+            const menu = document.querySelector(".mobile-menu");
 
-        // add event listeners
-        btn.addEventListener("click", () => {
-            menu.classList.toggle("hidden");
+            // add event listeners
+            btn.addEventListener("click", () => {
+                menu.classList.toggle("hidden");
+            });
+
+            var customer = "<?php echo $_GET['customer']; ?>";
+            var email = "<?php echo $_GET['email']; ?>";
+
+            // Get all the pet data by API call
+            $.ajax({
+                url: 'petdataapi.php',
+                method: 'GET',
+                data: {
+                    email: email,
+                },
+                success: function (response) {
+                    // Handle the AJAX success response
+                    console.log(response);
+
+                    if (response.data) {
+                        // Update page layout    
+                        const petContainer = document.getElementById('pets-container');
+
+                        if (response.data.length > 0) {
+                            response.data.forEach(pet => {
+                                // Create a div element for the pet card
+                                const petCard = document.createElement('div');
+                                petCard.classList.add('grid', 'gap-4');
+
+                                // Determine the age unit text based on the ageUnit value
+                                const ageUnitText = pet.ageUnit === "Y" ? "years" : pet.ageUnit === "W" ? "weeks" : "units";
+
+                                // Populate the pet card with data from the API response
+                                petCard.innerHTML = `                                
+                                <div class="p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+                                    <img class="rounded-lg object-cover w-full h-52" src="${pet.photo}" alt="${pet.name}" />
+                                    <h2 class="font-bold text-darkblue-primary font-poppins mt-4">${pet.name}</h2>
+                                    <!-- Details -->
+                                    <dl class="divide-y divide-gray-100">
+                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">Gender:</dt>
+                                            <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">${pet.gender}</dd>
+                                        </div>
+                                        <!-- Include age and breed in a similar manner -->
+                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">Age:</dt>
+                                            <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">${pet.age} ${ageUnitText}</dd>
+                                        </div>
+                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">Breed:</dt>
+                                            <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">${pet.breed}</dd>
+                                        </div>
+                                    </dl>
+                                    <div class="py-4">
+                                        <button id="bookingBtn" class="w-full h-12 px-6 text-white bg-darkblue-primary rounded-full font-poppins text-sm">Book Appointment</button>
+                                    </div>
+                                    <div class="pb-4">
+                                        <button id="editBtn" class="w-full h-12 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full font-poppins text-sm">Edit</button>
+                                    </div>
+                                </div>
+                            `;
+
+                                // Append the pet card to the pet container
+                                petContainer.appendChild(petCard);
+
+                                // Get the "Book Appointment" button and "Edit" button by their IDs
+                                const bookAppointmentButton = petCard.querySelector('#bookingBtn');
+                                const editButton = petCard.querySelector('#editBtn');
+
+                                // Add a click event handler to the "Book Appointment" button
+                                bookAppointmentButton.addEventListener('click', function () {
+                                    // Redirect to another page with the pet's name as a query parameter
+                                    window.location.href = 'booking.php?email=' + encodeURIComponent(email) + '&customer=' + encodeURIComponent(customer) + '&petname=' + encodeURIComponent(pet.name);
+                                });
+
+                                // Add a click event handler to the "Edit" button (you can customize this as needed)
+                                editButton.addEventListener('click', function () {
+                                    // Handle the "Edit" button click as required
+                                });
+
+                            });
+
+                        } else {
+                            // Display "No pet record" message when data is null or empty
+                            const noPetRecordMessage = document.createElement('div');
+                            noPetRecordMessage.classList.add('col-span-3', 'lg:col-span-full');
+                            noPetRecordMessage.innerHTML = `
+                                <p class="font-poppins">No pet record</p>
+                            `;
+
+                            // Append the "No pet record" message to the pet container
+                            petContainer.appendChild(noPetRecordMessage);
+                        }
+
+                    } else {
+                        showToast(response.message);
+                    }
+                }, error: function (error) {
+                    // Handle the AJAX error
+                    console.log(error);
+                }
+            });
+
+
         });
     </script>
 </body>

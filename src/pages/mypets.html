@@ -72,7 +72,7 @@
     <!-- Body Container -->
     <div class="flex flex-col h-screen justify-between">
         <!-- Main Content -->
-        <div class="max-w-6xl mx-auto px-4 py-6">
+        <div class="container max-w-6xl mx-auto px-4 py-6">
             <div class="mt-8 lg:flex lg:gap-x-16">
                 <!-- Side Menu -->
                 <div class="lg:w-1/4 lg:block mt-16">
@@ -113,148 +113,133 @@
                         </div>
                     </header>
 
-                    <div class="mx-auto max-w-xl pt-3 lg:max-w-7xl">
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="col-span-3 lg:col-span-full">
+                            <p class="font-poppins">No pet record</p>
+                        </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             <!-- Card 1 -->
-                            <div class="grid gap-4">
-                                <div class="p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-                                    <img class="rounded-lg object-cover w-full h-52"
-                                        src="https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80"
-                                        alt="" />
-                                    <h2 class="font-bold text-darkblue-primary font-poppins mt-4">Noodle</h2>
-                                    <!-- Details -->
-                                    <dl class="divide-y divide-gray-100">
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Gender:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                Male</dd>
-                                        </div>
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Age:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                3 years</dd>
-                                        </div>
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Breed:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                Golden Retriever</dd>
-                                        </div>
-                                    </dl>
-                                    <div class="py-4">
-                                        <button
-                                            class="w-full h-12 px-6 text-white bg-darkblue-primary rounded-full font-poppins text-sm">Book
-                                            Appointment</button>
+                            <div class="p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+                                <img class="rounded-lg object-cover w-full h-52"
+                                    src="https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80"
+                                    alt="" />
+                                <h2 class="font-bold text-darkblue-primary font-poppins mt-4">Noodle</h2>
+                                <!-- Details -->
+                                <dl class="divide-y divide-gray-100">
+                                    <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="font-poppins leading-6 font-medium text-neutral-60">
+                                            Gender:
+                                        </dt>
+                                        <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
+                                            Male</dd>
                                     </div>
-                                    <div class="pb-4">
-                                        <button
-                                            class="w-full h-12 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full font-poppins text-sm">Edit</button>
+                                    <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="font-poppins leading-6 font-medium text-neutral-60">
+                                            Age:
+                                        </dt>
+                                        <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
+                                            3 years</dd>
                                     </div>
+                                    <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="font-poppins leading-6 font-medium text-neutral-60">
+                                            Breed:
+                                        </dt>
+                                        <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
+                                            Golden Retriever</dd>
+                                    </div>
+                                </dl>
+                                <div class="py-4">
+                                    <button
+                                        class="w-full h-12 px-6 text-white bg-darkblue-primary rounded-full font-poppins text-sm">Book
+                                        Appointment</button>
+                                </div>
+                                <div class="pb-4">
+                                    <button
+                                        class="w-full h-12 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full font-poppins text-sm">Edit</button>
                                 </div>
                             </div>
-
                             <!-- Card 2 -->
-                            <div class="grid gap-4">
-                                <div class="p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-                                    <img class="rounded-lg object-cover w-full h-52"
-                                        src="https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80"
-                                        alt="" />
-                                    <h2 class="font-bold text-darkblue-primary font-poppins mt-4">Noodle</h2>
-                                    <!-- Details -->
-                                    <dl class="divide-y divide-gray-100">
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Gender:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                Male</dd>
-                                        </div>
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Age:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                3 years</dd>
-                                        </div>
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Breed:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                Golden Retriever</dd>
-                                        </div>
-                                    </dl>
-                                    <div class="py-4">
-                                        <button
-                                            class="w-full h-12 px-6 text-white bg-darkblue-primary rounded-full font-poppins text-sm">Book
-                                            Appointment</button>
+                            <div class="p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+                                <img class="rounded-lg object-cover w-full h-52"
+                                    src="https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80"
+                                    alt="" />
+                                <h2 class="font-bold text-darkblue-primary font-poppins mt-4">Noodle</h2>
+                                <!-- Details -->
+                                <dl class="divide-y divide-gray-100">
+                                    <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="font-poppins leading-6 font-medium text-neutral-60">
+                                            Gender:
+                                        </dt>
+                                        <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
+                                            Male</dd>
                                     </div>
-                                    <div class="pb-4">
-                                        <button
-                                            class="w-full h-12 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full font-poppins text-sm">Edit</button>
+                                    <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="font-poppins leading-6 font-medium text-neutral-60">
+                                            Age:
+                                        </dt>
+                                        <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
+                                            3 years</dd>
                                     </div>
+                                    <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="font-poppins leading-6 font-medium text-neutral-60">
+                                            Breed:
+                                        </dt>
+                                        <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
+                                            Golden Retriever</dd>
+                                    </div>
+                                </dl>
+                                <div class="py-4">
+                                    <button
+                                        class="w-full h-12 px-6 text-white bg-darkblue-primary rounded-full font-poppins text-sm">Book
+                                        Appointment</button>
+                                </div>
+                                <div class="pb-4">
+                                    <button
+                                        class="w-full h-12 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full font-poppins text-sm">Edit</button>
                                 </div>
                             </div>
-
                             <!-- Card 3 -->
-                            <div class="grid gap-4">
-                                <div class="p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
-                                    <img class="rounded-lg object-cover w-full h-52"
-                                        src="https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80"
-                                        alt="" />
-                                    <h2 class="font-bold text-darkblue-primary font-poppins mt-4">Noodle</h2>
-                                    <!-- Details -->
-                                    <dl class="divide-y divide-gray-100">
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Gender:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                Male</dd>
-                                        </div>
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Age:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                3 years</dd>
-                                        </div>
-                                        <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                            <dt class="font-poppins leading-6 font-medium text-neutral-60">
-                                                Breed:
-                                            </dt>
-                                            <dd
-                                                class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
-                                                Golden Retriever</dd>
-                                        </div>
-                                    </dl>
-                                    <div class="py-4">
-                                        <button
-                                            class="w-full h-12 px-6 text-white bg-darkblue-primary rounded-full font-poppins text-sm">Book
-                                            Appointment</button>
+                            <div class="p-4 max-w-sm bg-white border border-gray-200 rounded-lg shadow">
+                                <img class="rounded-lg object-cover w-full h-52"
+                                    src="https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80"
+                                    alt="" />
+                                <h2 class="font-bold text-darkblue-primary font-poppins mt-4">Noodle</h2>
+                                <!-- Details -->
+                                <dl class="divide-y divide-gray-100">
+                                    <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="font-poppins leading-6 font-medium text-neutral-60">
+                                            Gender:
+                                        </dt>
+                                        <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
+                                            Male</dd>
                                     </div>
-                                    <div class="pb-4">
-                                        <button
-                                            class="w-full h-12 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full font-poppins text-sm">Edit</button>
+                                    <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="font-poppins leading-6 font-medium text-neutral-60">
+                                            Age:
+                                        </dt>
+                                        <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
+                                            3 years</dd>
                                     </div>
+                                    <div class="xl:px-4 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt class="font-poppins leading-6 font-medium text-neutral-60">
+                                            Breed:
+                                        </dt>
+                                        <dd class="mt-1 leading-6 text-neutral-60 sm:col-span-2 sm:mt-0 font-poppins">
+                                            Golden Retriever</dd>
+                                    </div>
+                                </dl>
+                                <div class="py-4">
+                                    <button
+                                        class="w-full h-12 px-6 text-white bg-darkblue-primary rounded-full font-poppins text-sm">Book
+                                        Appointment</button>
+                                </div>
+                                <div class="pb-4">
+                                    <button
+                                        class="w-full h-12 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full font-poppins text-sm">Edit</button>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
