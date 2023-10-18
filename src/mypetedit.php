@@ -250,11 +250,11 @@ if (isset($_GET['petid'])) {
                             <div class="flex flex-row w-full space-x-4 bg-gray-100 px-8 py-4 rounded">
                                 <div class="flex-grow flex items-center space-x-4">
                                     <img src="img/icon-document.svg" alt="">
-                                    <span id ='myRecord' class="font-poppins">vaccine-record-20230614</span>
-                                    <span class="font-poppins text-state-blue">Preview</span>
+                                    <span id ='myRecord' class="font-poppins">No file uploaded</span>
+                                    <a href='#' target="_blank" id = 'fileprev' class="font-poppins text-state-blue">Preview</a>
                                 </div>
-                                <div class="flex-none font-poppins">
-                                    5.7MB
+                                <div id='fileSize' class="flex-none font-poppins">
+                                    0.0MB
                                 </div>
                             </div>
                         </div>
@@ -386,7 +386,6 @@ if (isset($_GET['petid'])) {
         btn.addEventListener("click", () => {
             menu.classList.toggle("hidden");
         });
-
         $.ajax({
                 url: 'petdataapi.php',
                 method: 'GET',
@@ -402,8 +401,34 @@ if (isset($_GET['petid'])) {
                                 for(let i=0;i<response.data.length;i++){
                                     if(response.data[i].id == petid){
                                         console.log(petid);
+                                        if(response.data[i].photo != ''){
                                         img.setAttribute('src', response.data[i].photo);
+                                        url1=response.data[i].photo;
+                                        }else {url1="";}
+                                        if(response.data[i].vaccination != ''){
                                         record.innerHTML = response.data[i].vaccination.substring(response.data[i].vaccination.length-20);
+                                        url2=response.data[i].vaccination;
+                                        }else{url2="";}
+
+                                        const pname = document.getElementById('petNameField');
+                                        pname.setAttribute('placeholder', response.data[i].name);
+                                        const pAge = document.getElementById('petAgeField');
+                                        pAge.setAttribute('placeholder', response.data[i].age);
+                                        const pAgeUnit = document.getElementById('petAgeUnitField');
+                                        if(response.data[i].ageUnit == 'Y'){
+                                            document.getElementById('petAgeUnitField').value = "Years Old";
+                                        } else {document.getElementById('petAgeUnitField').value = "Weeks";}
+                                        const pGender = document.getElementById('petGenderField');
+                                        if(response.data[i].gender == 'Male'){
+                                            document.getElementById('petGenderField').value = "Male";
+                                        } else {document.getElementById('petGenderField').value = "Female";}
+                                        const pWeight = document.getElementById('petWeightField');
+                                        pWeight.setAttribute('placeholder', response.data[i].weight);
+                                        const pBreed = document.getElementById('petBreedField');
+                                        pBreed.setAttribute('placeholder', response.data[i].breed);
+                                    }else {
+                                        url1='';
+                                        url2='';
                                     }
                                 }
                             } else {
@@ -423,6 +448,8 @@ if (isset($_GET['petid'])) {
        const myRecord = document.getElementById('myRecord');
        const uploadBtn = document.getElementById('uploadBtn');
        const recordBtn = document.getElementById('uploadRecord');
+       const fileSize = document.getElementById('fileSize');
+       const fileprev = document.getElementById('fileprev');
        uploadBtn.addEventListener('click', () => {
                 imgInput.click();
                 const imgs = imgInput.files;
@@ -445,15 +472,18 @@ if (isset($_GET['petid'])) {
                    }
           }
           imgInput.addEventListener("change", previewPhoto);
-          const previewFile = () => {
+        const previewFile = () => {
             const files = fileInput.files;
                   if (files) {
                      const fileReader = new FileReader();
                      const previewFile = document.getElementById('myRecord');
                      fileReader.onload = function (event) {
-                           previewFile.setAttribute('src', event.target.result);
+                           s3fileUpload(files[0]); 
+                           previewFile.innerHTML = files[0].name.substring(files[0].name.length-20);
+                           fileSize.innerHTML = Math.round((files[0].size/1000000)*1000)/1000 + 'MB';
+                           fileprev.setAttribute('href', event.target.result);
                         }
-                    s3fileUpload(files[0]);  
+                     
                     fileReader.readAsDataURL(files[0]);
                     //console.log(fileReader.readAsDataURL(file[0]));
                    }
@@ -466,8 +496,12 @@ if (isset($_GET['petid'])) {
           var customer = "<?php echo isset($_GET['customer']) ?>";
           var owner = "<?php echo $_GET['email']; ?>";
           saveButton.addEventListener('click', function () {
+            var errormsg = validateForm();
+            if (errormsg.trim() === "") {
+                console.log("success 1");
+               if(typeof imgURL !== 'undefined'){url1=imgURL;}
+               if(typeof fileURL !== 'undefined'){url2=fileURL;}
             $.ajax({
-                        
                         url: 'editPetAPI.php',
                         method: 'POST',
                         data: {
@@ -475,10 +509,10 @@ if (isset($_GET['petid'])) {
                             petAge: document.getElementById("petAgeField").value,
                             ageUnit: document.getElementById("petAgeUnitField").value,
                             petGender: document.getElementById("petGenderField").value,
-                            petWeight: document.getElementById("petWeightField").value,
+                            petWeight: Number.parseFloat(document.getElementById("petWeightField").value).toFixed(1),
                             petBreed: document.getElementById("petBreedField").value,
-                            imgFile: imgURL,
-                            vaccination: fileURL,
+                            imgFile: url1,
+                            vaccination: url2,
                             petId: petid,
                             Action: action,
                             owner : "<?php echo $_GET['email']; ?>",
@@ -502,7 +536,9 @@ if (isset($_GET['petid'])) {
                             console.log(error);
                         }
                     });
-
+                    } else{
+                        showToast(errormsg);
+                    }
           });
           function showToast(message) {
             const errorToast = document.getElementById('error-toast');
@@ -571,9 +607,53 @@ if (isset($_GET['petid'])) {
                      console.error('Error uploading photo:', err);
                      return;
                    }
-            console.log('uploaded successfully:', data.Location);
+            console.log('uploaded successfully:', data);
             imgURL = data.Location;
            });
+  }
+
+  function validateForm() {
+                var petNameField = document.getElementById("petNameField").value;
+                var petAgeField = document.getElementById("petAgeField").value;
+                var petAgeUnitField = document.getElementById("petAgeUnitField").value;
+                var petGenderField = document.getElementById("petGenderField").value;
+                var petWeightField = document.getElementById("petWeightField").value;
+                var petBreedField = document.getElementById("petBreedField").value;
+                var errormsg = "";
+
+                // Check if pet name is empty
+                if (petNameField.trim() === "") {
+                    errormsg += 'Pet Name is required.\n';
+                }
+
+                // Check if age name is empty
+                if (petAgeField.trim() === "") {
+                    errormsg += 'Pet Age is required.\n';
+                }else if(Number.isInteger(parseFloat(petAgeField.trim()))===false){
+                    errormsg += 'Age must be a whole number.\n'
+                }
+
+                // Check if age unit is empty
+                if (petAgeUnitField.trim() === "") {
+                    errormsg += 'Age unit is required.\n';
+                } 
+
+                // Check if gender is empty
+                if (petGenderField.trim() === "Gender") {
+                    errormsg += 'Pet gender is required.\n';
+                }
+
+                // Check if weight is empty
+                if (petWeightField.trim() === "") {
+                    errormsg += 'Pet Weight is required.\n';
+                } else if(Number.parseFloat(petWeightField).toFixed(1)=="NaN"){
+                    errormsg += 'Weight must be a number .\n'
+                }
+                // check if breed is empty
+                if (petBreedField.trim() === "") {
+                    errormsg += 'Pet breed is required.\n';
+                }
+            return errormsg;
   }
     </script>
 </body>

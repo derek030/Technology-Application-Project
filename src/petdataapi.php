@@ -26,7 +26,8 @@ if ($conn->connect_error) {
                 "breed" => $row['breed'],
                 "photo" => $row['photo'],
                 "owner" => $row['owner'],
-                "vaccination" => $row['vaccination']
+                "vaccination" => $row['vaccination'],
+                "weight" => $row['weight']
                 // Add other fields as needed
             );
             $pets[] = $pet;
