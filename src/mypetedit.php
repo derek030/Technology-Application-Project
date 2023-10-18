@@ -7,6 +7,9 @@ include 'databaseConfig.php';
 if (isset($_GET['action'])) {
     echo '<script>console.log("action is ' . $_GET['action'] . '");</script>';
 }
+if (isset($_GET['petid'])) {
+    echo '<script>console.log("petid is ' . $_GET['petid'] . '");</script>';
+}
 
 ?>
 
@@ -22,6 +25,7 @@ if (isset($_GET['action'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="styles.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1.24.min.js"></script>
     <title>My Pets</title>
 </head>
 
@@ -60,7 +64,7 @@ if (isset($_GET['action'])) {
 
             <div class='flex items-center px-2 py-3'>
                 <div class='mx-3'>
-                    <p id="success-content"></p>
+                    <p id="success-content">Success! redirect to pet pages.</p>
                 </div>
             </div>
         </div>
@@ -134,7 +138,7 @@ if (isset($_GET['action'])) {
                     Noodle’s Profile</h2>
             </div>
             <div class="my-12 mx-auto md:w-full md:max-w-xl px-4">
-                <form class="space-y-6 needs-validation" novalidate>
+                <form class="space-y-6 needs-validation" novalidate >
                     <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
 
                         <div class="sm:col-span-full">
@@ -145,7 +149,6 @@ if (isset($_GET['action'])) {
                                     class="block w-full rounded-md border-0 px-4 py-3.5  text-darkblue-primary shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-state-blue sm:text-sm sm:leading-6 font-poppins">
                             </div>
                         </div>
-
                         <div class="sm:col-span-3">
                             <label for="petAgeField"
                                 class="block text-sm font-medium leading-6 text-darkblue-primary font-poppins">
@@ -207,14 +210,15 @@ if (isset($_GET['action'])) {
 
                             <div class="flex flex-row space-x-4 items-center">
                                 <div class="rounded-lg overflow-hidden">
-                                    <img class="mypet-photo rounded-lg object-cover"
+                                    <img id ="myImg" class="mypet-photo rounded-lg object-cover"
                                         src="https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80"
                                         alt="" />
                                 </div>
                                 <div>
-                                    <button id="uploadBtn"
+                                    <button id="uploadBtn" type = "button"
                                         class="flex justify-center rounded-full bg-darkblue-primary px-8 py-2.5 leading-6 text-white shadow-sm mx-auto font-poppins font-medium">Upload
-                                        Photo</button>
+                                        Photo </button>
+                                        
                                 </div>
                                 <div class="">
                                     <button id="removeBtn"
@@ -234,9 +238,9 @@ if (isset($_GET['action'])) {
                                     <p class="font-poppins">JPG, PNG or PDF, file size no more than 10MB</p>
                                 </div>
                                 <div class="flex-none">
-                                    <button
+                                    <button type ='button' id = 'uploadRecord'
                                         class="flex justify-center rounded-full bg-darkblue-primary px-4 py-2.5 leading-6 text-white shadow-sm mx-auto font-poppins font-sm">Upload
-                                        Photo</button>
+                                        Record</button>
                                 </div>
                             </div>
                         </div>
@@ -246,7 +250,7 @@ if (isset($_GET['action'])) {
                             <div class="flex flex-row w-full space-x-4 bg-gray-100 px-8 py-4 rounded">
                                 <div class="flex-grow flex items-center space-x-4">
                                     <img src="img/icon-document.svg" alt="">
-                                    <span class="font-poppins">vaccine-record-20230614</span>
+                                    <span id ='myRecord' class="font-poppins">vaccine-record-20230614</span>
                                     <span class="font-poppins text-state-blue">Preview</span>
                                 </div>
                                 <div class="flex-none font-poppins">
@@ -256,10 +260,12 @@ if (isset($_GET['action'])) {
                         </div>
 
                         <div class="sm:col-span-full flex justify-center">
-                            <button id="submitBtn" type="button"
+                            <button id="submitBtn" type="button" 
                                 class="flex justify-center rounded-full bg-darkblue-primary px-8 py-2.5 leading-6 text-white shadow-sm mx-auto font-poppins font-medium">Save</button>
                         </div>
                 </form>
+                <input id="file-upload" type="file" name="recordfile"  style="display:none;" />
+                <input id="photo-upload" type="file" name="imgfile"  style="display:none;" />
             </div>
         </div>
 
@@ -371,17 +377,204 @@ if (isset($_GET['action'])) {
                 <div>© 2023. All rights reserved.</div>
             </div>
         </footer>
-    </div>
-
-    <!-- Javascript -->
+    </div>          
     <script>
+        $(document).ready(function () {
         const btn = document.querySelector("button.mobile-menu-button");
         const menu = document.querySelector(".mobile-menu");
-
         // add event listeners
         btn.addEventListener("click", () => {
             menu.classList.toggle("hidden");
         });
+
+        $.ajax({
+                url: 'petdataapi.php',
+                method: 'GET',
+                data: {
+                    email: owner,
+                    
+                },success: function (response) {
+                            // Handle the AJAX success response
+                            console.log(response);
+                            if (response.data) {
+                                var img = document.getElementById('myImg');
+                                var record = document.getElementById('myRecord');
+                                for(let i=0;i<response.data.length;i++){
+                                    if(response.data[i].id == petid){
+                                        console.log(petid);
+                                        img.setAttribute('src', response.data[i].photo);
+                                        record.innerHTML = response.data[i].vaccination.substring(response.data[i].vaccination.length-20);
+                                    }
+                                }
+                            } else {
+                                showToast(response.message);
+                            }
+                        }, error: function (error) {
+                            // Handle the AJAX error
+                            console.log(error);
+                        }
+                    });
+
+       });
+
+       const imgInput = document.getElementById('photo-upload');
+       const fileInput = document.getElementById('file-upload');
+       const myPetPhoto = document.querySelector('.mypet-photo');
+       const myRecord = document.getElementById('myRecord');
+       const uploadBtn = document.getElementById('uploadBtn');
+       const recordBtn = document.getElementById('uploadRecord');
+       uploadBtn.addEventListener('click', () => {
+                imgInput.click();
+                const imgs = imgInput.files;
+             });
+       recordBtn.addEventListener('click', () => {
+                fileInput.click();
+                const file = fileInput.files;
+            });
+       const previewPhoto = () => {
+            const imgs = imgInput.files;
+                  if (imgs) {
+                     const fileReader = new FileReader();
+                     const preview = document.getElementById('myImg');
+                     fileReader.onload = function (event) {
+                           preview.setAttribute('src', event.target.result);
+                        }
+                    s3imgUpload(imgs[0]);  
+                    fileReader.readAsDataURL(imgs[0]);
+                    //console.log(fileReader.readAsDataURL(file[0]));
+                   }
+          }
+          imgInput.addEventListener("change", previewPhoto);
+          const previewFile = () => {
+            const files = fileInput.files;
+                  if (files) {
+                     const fileReader = new FileReader();
+                     const previewFile = document.getElementById('myRecord');
+                     fileReader.onload = function (event) {
+                           previewFile.setAttribute('src', event.target.result);
+                        }
+                    s3fileUpload(files[0]);  
+                    fileReader.readAsDataURL(files[0]);
+                    //console.log(fileReader.readAsDataURL(file[0]));
+                   }
+          }
+          fileInput.addEventListener("change", previewFile);
+
+          const saveButton = document.getElementById('submitBtn');
+          var petid = "<?php echo $_GET['petid'] ?>";
+          var action = "<?php echo $_GET['action']; ?>";
+          var customer = "<?php echo isset($_GET['customer']) ?>";
+          var owner = "<?php echo $_GET['email']; ?>";
+          saveButton.addEventListener('click', function () {
+            $.ajax({
+                        
+                        url: 'editPetAPI.php',
+                        method: 'POST',
+                        data: {
+                            petName: document.getElementById("petNameField").value,
+                            petAge: document.getElementById("petAgeField").value,
+                            ageUnit: document.getElementById("petAgeUnitField").value,
+                            petGender: document.getElementById("petGenderField").value,
+                            petWeight: document.getElementById("petWeightField").value,
+                            petBreed: document.getElementById("petBreedField").value,
+                            imgFile: imgURL,
+                            vaccination: fileURL,
+                            petId: petid,
+                            Action: action,
+                            owner : "<?php echo $_GET['email']; ?>",
+                        },
+                        success: function (response) {
+                            // Handle the AJAX success response
+                            console.log(response);
+                            if (response.data) {
+                                console.log(response.data);
+                                // show success message for 10 seconds, then redirect to the portfolio page
+                                const successToast = document.getElementById('success-toast');
+                                successToast.classList.remove('hidden');
+                                setTimeout(function () {
+                                    window.location.href = 'mypets.php?loggedin=1&email=' + encodeURIComponent(response.data.Owner) + '&customer=' + customer; // Redirect to the portfolio page
+                                }, 10000); // Wait for 10 seconds before redirecting
+                            } else {
+                                showToast(response.message);
+                            }
+                        }, error: function (error) {
+                            // Handle the AJAX error
+                            console.log(error);
+                        }
+                    });
+
+          });
+          function showToast(message) {
+            const errorToast = document.getElementById('error-toast');
+            const errorContent = document.getElementById('error-content');
+            // Replace \n with <br> for line breaks
+            message = message.replace(/\n/g, '<br>');
+            errorContent.innerHTML = message;
+            errorToast.classList.remove('hidden');
+
+            // Automatically hide the toast after 10 seconds (10000 milliseconds)
+            setTimeout(hideToast, 10000);
+        }
+
+        function hideToast() {
+            const errorToast = document.getElementById('error-toast');
+            errorToast.classList.add('hidden');
+        }
+       
+    function s3fileUpload(file) {  
+        var bucketName = 'mytapproject';
+        var bucketRegion = 'ap-southeast-2';
+        var accessKey = 'AKIA6PWUECU5UXC5WZ6C';
+        var secret ='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';
+        var timest = Date.now();
+        AWS.config.update({
+            region: bucketRegion,
+            accessKeyId: accessKey,
+            secretAccessKey: secret
+        });
+        var s3 = new AWS.S3({
+            apiVersion:'latest',
+            params: {Bucket:bucketName}
+        });   
+        s3.upload({
+           Key: owner+timest+file.name,
+           Body: file
+            }, function(err, data) {
+                  if (err) {
+                     console.error('Error uploading video:', err);
+                     return;
+                   }
+            console.log('uploaded successfully:', data.Location);
+            fileURL = data.Location;
+           }); 
+  }
+  function s3imgUpload(img) {  
+        var bucketName = 'mytapproject';
+        var bucketRegion = 'ap-southeast-2';
+        var accessKey = 'AKIA6PWUECU5UXC5WZ6C';
+        var secret ='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';
+        var timest = Date.now();
+        AWS.config.update({
+            region: bucketRegion,
+            accessKeyId: accessKey,
+            secretAccessKey: secret
+        });
+        var s3 = new AWS.S3({
+            apiVersion:'latest',
+            params: {Bucket:bucketName}
+        });   
+        s3.upload({
+           Key: owner+timest+img.name,
+           Body: img
+            }, function(err, data) {
+                  if (err) {
+                     console.error('Error uploading photo:', err);
+                     return;
+                   }
+            console.log('uploaded successfully:', data.Location);
+            imgURL = data.Location;
+           });
+  }
     </script>
 </body>
 

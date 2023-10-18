@@ -7,7 +7,7 @@ if ($conn->connect_error) {
     $response_data = array(
         "message" => "Database connection failed."
     );
-} else {
+} else if(isset($_GET['email'])){
     $email = $_GET['email'];
 
     // Query to get all pet data
@@ -26,6 +26,7 @@ if ($conn->connect_error) {
                 "breed" => $row['breed'],
                 "photo" => $row['photo'],
                 "owner" => $row['owner'],
+                "vaccination" => $row['vaccination']
                 // Add other fields as needed
             );
             $pets[] = $pet;
@@ -40,6 +41,15 @@ if ($conn->connect_error) {
             "message" => "Failed to fetch pet data."
         );
     }
+} else {
+    $pid = $_GET['petid'];
+    $query = "SELECT photo FROM pet WHERE id = '$pid'";
+    $result = $conn->query($query);
+    $row = $result->fetch_assoc();
+    $imgsrc = $row['photo'];
+    $reponse_data = array (
+    "imgsrc" => $imgsrc
+    );
 }
 
 header('Content-Type: application/json');

@@ -166,7 +166,7 @@ if (isset($_GET['customer'])) {
                                 </div>
 
                                 <div class="mt-4 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
-                                    <a href="mypetedit.php?action=add"
+                                    <a href="mypetedit.php?action=add&loggedin=1&petid=0&email=<?php echo urlencode($_SESSION['email']); ?>&customer=<?php echo urlencode($_SESSION['customer']); ?>"
                                         class="bg-transparent text-darkblue-primary border border-darkblue-primary rounded-full px-5 py-2.5 text-center inline-flex items-center mr-2 mb-2 font-poppins"><img
                                             class="mr-2" src="img/edit--add-plus.svg" alt=""> Add New Pet</a>
                                 </div>
@@ -390,7 +390,7 @@ if (isset($_GET['customer'])) {
 
                                 editButton.addEventListener('click', function () {
                                     // Redirect to edit pet profile page
-                                    window.location.href = 'mypetedit.php?action=edit&petid=' + encodeURIComponent(pet.id);
+                                    window.location.href = 'mypetedit.php?action=edit&petid=' + encodeURIComponent(pet.id) + '&email=' + encodeURIComponent(email);
                                 });
 
                                 // Append the elements to the pet card
