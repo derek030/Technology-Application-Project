@@ -394,19 +394,20 @@ if (isset($_GET['petid'])) {
                     
                 },success: function (response) {
                             // Handle the AJAX success response
-                            console.log(response);
+                            console.log(petid);
                             if (response.data) {
                                 var img = document.getElementById('myImg');
                                 var record = document.getElementById('myRecord');
                                 for(let i=0;i<response.data.length;i++){
                                     if(response.data[i].id == petid){
-                                        console.log(petid);
+                                        
                                         if(response.data[i].photo != ''){
                                         img.setAttribute('src', response.data[i].photo);
                                         url1=response.data[i].photo;
                                         }else {url1="";}
                                         if(response.data[i].vaccination != ''){
                                         record.innerHTML = response.data[i].vaccination.substring(response.data[i].vaccination.length-20);
+                                        fileprev.setAttribute('href', response.data[i].vaccination);
                                         url2=response.data[i].vaccination;
                                         }else{url2="";}
 
@@ -426,7 +427,8 @@ if (isset($_GET['petid'])) {
                                         pWeight.setAttribute('placeholder', response.data[i].weight);
                                         const pBreed = document.getElementById('petBreedField');
                                         pBreed.setAttribute('placeholder', response.data[i].breed);
-                                    }else {
+                                    }else if(petid=='0'){
+                                        console.log(typeof(petid));
                                         url1='';
                                         url2='';
                                     }
