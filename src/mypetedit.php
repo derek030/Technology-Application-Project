@@ -430,6 +430,8 @@ if (isset($_GET['petid'])) {
                                         pBreed.value = response.data[i].breed;
                                     }else if(petid=='0'){
                                         console.log(typeof(petid));
+                                        const ptitle = document.getElementById('petTitle');
+                                        ptitle.innerHTML = "Add Profile";
                                         url1='';
                                         url2='';
                                     }
