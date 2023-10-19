@@ -58,8 +58,14 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === 1) {
           <a href="register.php"
             class="py-2.5 px-6 bg-darkblue-primary text-white rounded-full font-poppins font-medium"
             style="display:<?php echo ($isLoginPanelShowed ? 'block' : 'none'); ?>">Register</a>
-          <a href="mypets.php?loggedin=1&email=<?php echo urlencode($_SESSION['email']); ?>&customer=<?php echo urlencode($_SESSION['customer']); ?>"
-            class="py-2.5 px-6 bg-darkblue-primary text-white rounded-full font-poppins font-medium"
+          <a href="mypets.php?loggedin=1<?php
+          if (isset($_SESSION['email'])) {
+            echo '&email=' . urlencode($_SESSION['email']);
+          }
+          if (isset($_SESSION['customer'])) {
+            echo '&customer=' . urlencode($_SESSION['customer']);
+          }
+          ?>" class="py-2.5 px-6 bg-darkblue-primary text-white rounded-full font-poppins font-medium"
             style="display:<?php echo ($isLoginPanelShowed ? 'none' : 'block'); ?>">My Profile</a>
           <a href="logout.php"
             class="py-2.5 px-6 bg-transparent text-darkblue-primary border border-darkblue-primary font-medium rounded-full font-poppins"
@@ -89,8 +95,14 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === 1) {
         style="display:<?php echo ($isLoginPanelShowed ? 'block' : 'none'); ?>">Login</a>
       <a href="register.php" class="block py-2 px-6  text-darkblue-primary font-poppins"
         style="display:<?php echo ($isLoginPanelShowed ? 'block' : 'none'); ?>">Register</a>
-      <a href="mypets.php?loggedin=1&email=<?php echo urlencode($_SESSION['email']); ?>&customer=<?php echo urlencode($_SESSION['customer']); ?>"
-      class="block py-2 px-6  text-darkblue-primary font-poppins"
+      <a href="mypets.php?loggedin=1<?php
+      if (isset($_SESSION['email'])) {
+        echo '&email=' . urlencode($_SESSION['email']);
+      }
+      if (isset($_SESSION['customer'])) {
+        echo '&customer=' . urlencode($_SESSION['customer']);
+      }
+      ?>" class="block py-2 px-6  text-darkblue-primary font-poppins"
         style="display:<?php echo ($isLoginPanelShowed ? 'none' : 'block'); ?>">My Profile</a>
       <a href="logout.php" class="block py-2 px-6  text-darkblue-primary font-poppins"
         style="display:<?php echo ($isLoginPanelShowed ? 'none' : 'block'); ?>">Logout</a>
