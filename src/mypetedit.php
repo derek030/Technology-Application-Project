@@ -412,9 +412,9 @@ if (isset($_GET['petid'])) {
                                         }else{url2="";}
 
                                         const pname = document.getElementById('petNameField');
-                                        pname.setAttribute('placeholder', response.data[i].name);
+                                        pname.value=response.data[i].name;
                                         const pAge = document.getElementById('petAgeField');
-                                        pAge.setAttribute('placeholder', response.data[i].age);
+                                        pAge.value= response.data[i].age;
                                         const pAgeUnit = document.getElementById('petAgeUnitField');
                                         if(response.data[i].ageUnit == 'Y'){
                                             document.getElementById('petAgeUnitField').value = "Years Old";
@@ -424,9 +424,9 @@ if (isset($_GET['petid'])) {
                                             document.getElementById('petGenderField').value = "Male";
                                         } else {document.getElementById('petGenderField').value = "Female";}
                                         const pWeight = document.getElementById('petWeightField');
-                                        pWeight.setAttribute('placeholder', response.data[i].weight);
+                                        pWeight.value = response.data[i].weight;
                                         const pBreed = document.getElementById('petBreedField');
-                                        pBreed.setAttribute('placeholder', response.data[i].breed);
+                                        pBreed.value = response.data[i].breed;
                                     }else if(petid=='0'){
                                         console.log(typeof(petid));
                                         url1='';
