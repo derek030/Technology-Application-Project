@@ -133,7 +133,7 @@ if (isset($_GET['petid'])) {
         <!-- Main Content -->
         <div class="justify-center">
             <div class="sm:mx-auto sm:w-full md:max-w-xl">
-                <h2
+                <h2 id='petTitle'
                     class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-darkblue-primary font-poppins">
                     Noodle’s Profile</h2>
             </div>
@@ -410,7 +410,8 @@ if (isset($_GET['petid'])) {
                                         fileprev.setAttribute('href', response.data[i].vaccination);
                                         url2=response.data[i].vaccination;
                                         }else{url2="";}
-
+                                        const ptitle = document.getElementById('petTitle');
+                                        ptitle.innerHTML = response.data[i].name + "'s Profile";
                                         const pname = document.getElementById('petNameField');
                                         pname.value=response.data[i].name;
                                         const pAge = document.getElementById('petAgeField');
